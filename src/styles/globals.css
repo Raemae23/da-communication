@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Dark Mode Overrides ──────────────────────────────────────────────── */
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body,
+html.dark #root {
+  background-color: #0f172a; /* slate-900 */
+  color: #e2e8f0; /* slate-200 */
+}
+
+/* Navbar */
+html.dark nav {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  border-color: #1e293b !important;
+}
+
+html.dark nav span,
+html.dark nav a {
+  color: #e2e8f0;
+}
+
+/* Cards / white panels */
+html.dark .bg-white,
+html.dark .da-card-premium {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0;
+}
+
+/* Inputs */
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Input placeholders */
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Slate backgrounds used in sections */
+html.dark .bg-slate-50 {
+  background-color: #1e293b !important;
+}
+
+html.dark .bg-slate-100 {
+  background-color: #334155 !important;
+}
+
+/* Text overrides */
+html.dark .text-slate-900 { color: #f1f5f9 !important; }
+html.dark .text-slate-700 { color: #cbd5e1 !important; }
+html.dark .text-slate-600 { color: #94a3b8 !important; }
+html.dark .text-slate-500 { color: #94a3b8 !important; }
+html.dark .text-slate-400 { color: #64748b !important; }
+
+/* Table */
+html.dark table thead {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+html.dark tbody tr {
+  border-color: #1e293b !important;
+}
+
+html.dark tbody tr:hover {
+  background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+/* Footer */
+html.dark footer {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+/* Border overrides */
+html.dark .border-slate-100 { border-color: #334155 !important; }
+html.dark .border-slate-50  { border-color: #1e293b !important; }

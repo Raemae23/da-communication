@@ -1,0 +1,93 @@
+// src/templates/SpecialOrder.jsx
+import React, { forwardRef } from 'react';
+import '../styles/print-layout.css';
+
+import headerImg from '../assets/images/da-header.png';
+import footerImg from '../assets/images/da-footer.png';
+
+const SpecialOrder = forwardRef(({ data }, ref) => {
+  const isFolio = data.paperSize === 'Folio';
+  const paperDimensions = isFolio
+    ? { '--page-height': '13in', '--page-width': '8.5in' }
+    : { '--page-height': '11.69in', '--page-width': '8.27in' };
+
+  const sections = data.contentSections || [data.bodyText || ''];
+
+  return (
+    <div ref={ref} className="da-multi-page-container font-serif text-[11pt] text-black">
+      {sections.map((content, index) => {
+        const isFirstPage = index === 0;
+        const isLastPage = index === sections.length - 1;
+
+        return (
+          <div
+            key={index}
+            className="da-document-wrapper flex flex-col justify-between whitespace-pre-wrap"
+            style={paperDimensions}
+          >
+            <div className="w-full">
+              {/* HEADER */}
+              <div className="-mt-[1in] -ml-[1.25in] -mr-[1in] mb-0 w-[calc(100%+2.25in)]">
+                <img src={headerImg} alt="DA Letterhead" className="w-full h-auto object-cover block" />
+              </div>
+
+              {isFirstPage && (
+                <>
+                  <div className="font-bold uppercase text-left mb-[0]">
+                    SPECIAL ORDER
+                  </div>
+                  <div className="text-left mb-[2.3em] font-bold leading-[1]">
+                    <div>No. {data.documentNumber || "___"}</div>
+                    <div>Series of {data.seriesYear || new Date().getFullYear()}</div>
+                  </div>
+                  <div className="flex text-left items-start mb-[1.15em]">
+                    <div className="font-bold uppercase whitespace-nowrap tracking-wide">SUBJECT</div>
+                    <div className="font-bold ml-1">:</div>
+                    <div className="flex-1 uppercase font-bold ml-2">
+                      {data.subject || "NO SUBJECT PROVIDED"}
+                    </div>
+                  </div>
+                  <hr className="border-t-[1px] border-black my-[1.15em]" />
+                </>
+              )}
+
+              {/* BODY CONTENT */}
+              <div
+                className="da-document-body text-justify leading-[1.15] [&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-8 [&_ol]:list-decimal [&_ol]:pl-8 [&_li]:mb-[0] [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-black [&_td]:p-2 [&_th]:border [&_th]:border-black [&_th]:p-2"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+
+              {isLastPage && (
+                <>
+                  {/* Issue Date removed per user request (they will use the editor snippet instead) */}
+
+                  {/* Signature Block: Left aligned, bold name and position */}
+                  <div className="text-left leading-[1] page-break-inside-avoid">
+                    <div className="h-[3em]"></div>
+                    <div className="font-bold uppercase">{data.signatoryName || "ATTY. CHRISTOPHER R. BAÑAS"}</div>
+                    <div className="font-bold capitalize">{data.signatoryTitle || "Regional Executive Director"}</div>
+                    {data.signatoryOffice && <div className="font-bold capitalize">{data.signatoryOffice}</div>}
+                  </div>
+
+                  {/* Review Initials */}
+                  <div className="mt-[2.3em] text-left page-break-inside-avoid text-[8pt] leading-[1]">
+                    <div className="tracking-wide capitalize">{data.reviewerInitials || "J.D. Cruz"}</div>
+                    <div className="font-normal">{data.reviewerDesignation || "Division Chief"}</div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="-mb-[1in] -ml-[1.25in] -mr-[1in] mt-12 w-[calc(100%+2.25in)]">
+              <div className="relative">
+                <img src={footerImg} alt="DA Footer" className="w-full h-auto object-cover block" />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+});
+
+export default SpecialOrder;

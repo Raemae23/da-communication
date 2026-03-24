@@ -1,0 +1,266 @@
+:root {
+  /* DA Brand Palette (Official Government Colors) */
+  --da-green-50: #f0fdf4;
+  --da-green-100: #dcfce7;
+  --da-green-200: #bbf7d0;
+  --da-green-300: #86efac;
+  --da-green-400: #4ade80;
+  --da-green-500: #22c55e;
+  --da-green-600: #16a34a; /* Primary Action */
+  --da-green-700: #15803d; /* Brand Dark */
+  --da-green-800: #166534; /* Brand Deep */
+  --da-green-900: #064e3b; /* Official Forest Green */
+  
+  --da-gold-50: #fefce8;
+  --da-gold-100: #fef9c3;
+  --da-gold-500: #eab308; /* Philippines Gold Accent */
+  --da-gold-600: #ca8a04;
+  --da-gold-700: #a16207;
+  
+  /* Neutral Palette (Slate/Zinc) */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+  color: var(--slate-800);
+  background-color: var(--slate-50);
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Reset & Animations */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--slate-50);
+}
+
+/* Scrollbar Overhaul */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--slate-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 100px;
+  border: 2px solid var(--slate-50);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-400);
+}
+
+/* Shared Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--slate-900);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+/* Interactive Elements */
+button {
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+input, select, textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+/* DA UI Utilities */
+.da-card-premium {
+  background: white;
+  border: 1px solid var(--slate-200);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+  border-radius: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.da-card-premium:hover {
+  border-color: var(--da-green-200);
+  box-shadow: 0 20px 40px -15px rgba(22, 101, 52, 0.06);
+  transform: translateY(-2px);
+}
+
+.da-gradient-bg {
+  background: linear-gradient(135deg, var(--da-green-900) 0%, var(--da-green-800) 100%);
+}
+
+.da-glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--slate-300) transparent;
+}
+
+/* ===========================
+   WORD-LIKE QUILL EDITOR TOOLBAR
+   =========================== */
+
+/* Toolbar outer container */
+.da-quill-editor .ql-toolbar.ql-snow {
+  background: #f3f4f6;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Group separators between toolbar sections */
+.da-quill-editor .ql-toolbar.ql-snow .ql-formats {
+  margin-right: 8px;
+  padding-right: 8px;
+  border-right: 1px solid #d1d5db;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+}
+
+.da-quill-editor .ql-toolbar.ql-snow .ql-formats:last-child {
+  border-right: none;
+}
+
+/* Individual toolbar buttons */
+.da-quill-editor .ql-toolbar.ql-snow button,
+.da-quill-editor .ql-toolbar.ql-snow .ql-picker-label {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  color: #374151;
+}
+
+.da-quill-editor .ql-toolbar.ql-snow button:hover,
+.da-quill-editor .ql-toolbar.ql-snow .ql-picker-label:hover {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.da-quill-editor .ql-toolbar.ql-snow button.ql-active,
+.da-quill-editor .ql-toolbar.ql-snow .ql-picker-label.ql-active {
+  background-color: #bfdbfe;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+/* Dropdowns (font, size, header) */
+.da-quill-editor .ql-toolbar.ql-snow .ql-picker {
+  height: 28px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.da-quill-editor .ql-toolbar.ql-snow .ql-font .ql-picker-label,
+.da-quill-editor .ql-toolbar.ql-snow .ql-size .ql-picker-label,
+.da-quill-editor .ql-toolbar.ql-snow .ql-header .ql-picker-label {
+  width: auto;
+  padding: 0 22px 0 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+}
+
+/* Dropdown options */
+.da-quill-editor .ql-toolbar.ql-snow .ql-picker-options {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+  background: white;
+  padding: 4px;
+}
+
+.da-quill-editor .ql-toolbar.ql-snow .ql-picker-item:hover {
+  background: #eff6ff;
+  border-radius: 4px;
+  color: #1d4ed8;
+}
+
+/* Editor content area */
+.da-quill-editor .ql-container.ql-snow {
+  border: none;
+  font-size: 12pt;
+  line-height: 1.5;
+}
+
+.da-quill-editor .ql-editor {
+  padding: 20px 24px;
+  min-height: 400px;
+  font-family: 'Cambria', serif;
+  color: #1e293b;
+}
+
+.da-quill-editor .ql-editor.ql-blank::before {
+  font-style: italic;
+  color: #94a3b8;
+  font-size: 11pt;
+}
+
+/* Blockquote style */
+.da-quill-editor .ql-editor blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 16px;
+  margin: 12px 0;
+  color: #475569;
+  font-style: italic;
+}
+
+/* SVG icon colors */
+.da-quill-editor .ql-toolbar.ql-snow button .ql-stroke {
+  stroke: #374151;
+}
+.da-quill-editor .ql-toolbar.ql-snow button .ql-fill {
+  fill: #374151;
+}
+.da-quill-editor .ql-toolbar.ql-snow button:hover .ql-stroke,
+.da-quill-editor .ql-toolbar.ql-snow button.ql-active .ql-stroke {
+  stroke: #1d4ed8;
+}
+.da-quill-editor .ql-toolbar.ql-snow button:hover .ql-fill,
+.da-quill-editor .ql-toolbar.ql-snow button.ql-active .ql-fill {
+  fill: #1d4ed8;
+}
