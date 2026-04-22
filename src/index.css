@@ -252,7 +252,7 @@ textarea {
 
 .da-quill-editor .ql-editor {
   padding: 50px 60px;
-  min-height: 600px;
+  min-height: 150px;
   line-height: 1.6;
   color: #1e293b;
 }

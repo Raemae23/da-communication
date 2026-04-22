@@ -67,7 +67,7 @@ const AdministrativeOrder = forwardRef(({ data }, ref) => {
               {/* BODY CONTENT (For this page) */}
               {/* Ensure Tailwind's reset is disabled for basic WYSIWYG elements (lists, tables, alignment styling) */}
               <div
-                className="da-document-body text-justify leading-[1.15] [&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-8 [&_ol]:list-decimal [&_ol]:pl-8 [&_li]:mb-0 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-black [&_td]:p-2 [&_th]:border [&_th]:border-black [&_th]:p-2"
+                className="da-document-body text-justify leading-[1.15] [&_p]:mb-[6pt] [&_ul]:list-disc [&_ul]:pl-8 [&_ol]:list-decimal [&_ol]:pl-8 [&_li]:mb-[0] [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-black [&_td]:p-2 [&_th]:border [&_th]:border-black [&_th]:p-2"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
 

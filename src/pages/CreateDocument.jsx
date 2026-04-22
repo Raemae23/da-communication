@@ -324,7 +324,7 @@ const CreateDocument = () => {
         // OVERFLOW DETECTED!
         // We'll move the last element to the next page
         const lastChild = editorContainer.lastElementChild;
-        if (!lastChild) return;
+        if (!lastChild || editorContainer.children.length <= 1) return;
 
         const overflowHTML = lastChild.outerHTML;
         editorContainer.removeChild(lastChild);
