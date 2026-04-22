@@ -8,6 +8,11 @@ import footerImg from '../assets/images/da-footer.png';
 
 // Using forwardRef so the print library can target this specific div
 const AdministrativeOrder = forwardRef(({ data }, ref) => {
+  const customHeader = localStorage.getItem('da_custom_header');
+  const customFooter = localStorage.getItem('da_custom_footer');
+  const finalHeader = customHeader || headerImg;
+  const finalFooter = customFooter || footerImg;
+
   const isFolio = data.paperSize === 'Folio';
   const paperDimensions = isFolio
     ? { '--page-height': '13in', '--page-width': '8.5in' }
@@ -32,7 +37,7 @@ const AdministrativeOrder = forwardRef(({ data }, ref) => {
             <div className="w-full">
               {/* HEADER (Every Page) */}
               <div className="-mt-[1in] -ml-[1.25in] -mr-[1in] mb-0 w-[calc(100%+2.25in)]">
-                <img src={headerImg} alt="DA Letterhead" className="w-full h-auto object-cover block" />
+                <img src={finalHeader} alt="DA Letterhead" className="w-full h-auto object-cover block" />
               </div>
 
               {/* METADATA (Only First Page) */}
@@ -80,7 +85,7 @@ const AdministrativeOrder = forwardRef(({ data }, ref) => {
 
                   {/* Document Review Initial: 2 spaces below signature block (approx 2.3em) */}
                   <div className="mt-[2.3em] text-left page-break-inside-avoid text-[8pt] leading-[1]">
-                    <div className="uppercase tracking-wide">{data.reviewerInitials || "J.D. CRUZ"}</div>
+                    <div className="tracking-wide">{data.reviewerInitials || "J.D. CRUZ"}</div>
                     <div className="font-normal">{data.reviewerDesignation || "Division Chief"}</div>
                   </div>
                 </>
@@ -90,7 +95,7 @@ const AdministrativeOrder = forwardRef(({ data }, ref) => {
             {/* --- BOTTOM SECTION (Footer Every Page) --- */}
             <div className="-mb-[1in] -ml-[1.25in] -mr-[1in] mt-12 w-[calc(100%+2.25in)]">
               <div className="relative">
-                <img src={footerImg} alt="DA Footer" className="w-full h-auto object-cover block" />
+                <img src={finalFooter} alt="DA Footer" className="w-full h-auto object-cover block" />
               </div>
             </div>
           </div>

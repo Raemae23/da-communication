@@ -213,14 +213,14 @@ const Dashboard = () => {
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col font-sans overflow-x-hidden text-[#2B2B2B]">
 
       {/* --- PREMIUM DASHBOARD NAVBAR --- */}
-      <nav className="bg-[#1E5631] px-8 py-5 flex justify-between items-center w-full sticky top-0 z-50 border-b-4 border-[#D4AF37] shadow-lg shadow-[#1E5631]/20">
-        <div className="flex items-center gap-5">
-          <div className="bg-[#FFFFFF] p-2.5 rounded-xl shadow-md transition-transform hover:scale-105">
-            <img src={daLogo} alt="DA Logo" className="h-8 w-8 object-contain" />
+      <nav className="bg-[#1E5631] px-8 sm:px-12 py-7 flex justify-between items-center w-full sticky top-0 z-50 border-b-4 border-[#D4AF37] shadow-xl shadow-[#1E5631]/20">
+        <div className="flex items-center gap-6">
+          <div className="bg-[#FFFFFF] p-1.5 rounded-full shadow-md transition-transform hover:scale-105 border-2 border-white/80 shrink-0">
+            <img src={daLogo} alt="DA Logo" className="h-14 w-14 object-contain" />
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-xl text-[#FFFFFF] leading-none tracking-tight">DA-MIMAROPA</span>
-            <span className="text-[9px] uppercase tracking-[0.3em] font-bold text-[#D4AF37] mt-1">Institutional Communication</span>
+            <span className="font-black text-3xl text-[#FFFFFF] leading-none tracking-tighter">DA-AMAD</span>
+            <span className="text-[10px] uppercase tracking-[0.35em] font-bold text-[#D4AF37] mt-1.5">Document System</span>
           </div>
         </div>
 
@@ -310,142 +310,174 @@ const Dashboard = () => {
       <main className="flex-1 px-8 py-10 lg:px-16 flex flex-col max-w-[1800px] mx-auto w-full space-y-12">
 
         {/* --- PERFORMANCE SNAPSHOT (STATS) --- */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="bg-[#FFFFFF] rounded-[2rem] shadow-sm p-5 group relative overflow-hidden border-2 border-transparent hover:border-[#1E5631]/20 transition-all">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-[#1E5631]/5 blur-2xl rounded-full -mr-10 -mt-10 transition-all"></div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="bg-[#F8F9FA] p-2.5 rounded-xl text-[#1E5631] group-hover:scale-110 group-hover:rotate-3 transition-transform border border-[#1E5631]/10">
-                <FileText size={18} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-[#FFFFFF] border border-slate-100 rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-8 group relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(30,86,49,0.06)] hover:-translate-y-1">
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-[#1E5631]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute -top-6 -right-6 text-[#1E5631]/[0.03] group-hover:text-[#1E5631]/10 transition-colors transform group-hover:scale-110 group-hover:-rotate-12 duration-500 pointer-events-none">
+              <FileText size={140} strokeWidth={1} />
+            </div>
+            <div className="flex items-center justify-between mb-8 relative z-10">
+              <div className="bg-gradient-to-br from-[#1E5631]/20 to-[#1E5631]/5 p-3.5 rounded-2xl text-[#1E5631] backdrop-blur-md shadow-inner border border-[#1E5631]/10">
+                <FileText size={24} />
               </div>
             </div>
-            <div className="text-4xl font-black text-[#2B2B2B] tracking-tighter mb-1">{documents.length}</div>
-            <div className="text-sm font-bold text-[#2B2B2B]/60 uppercase tracking-widest leading-none">Total Classified Issuances</div>
+            <div className="relative z-10">
+              <div className="text-6xl font-black text-[#2B2B2B] tracking-tighter mb-2">{documents.length}</div>
+              <div className="text-[11px] font-black text-[#2B2B2B]/40 uppercase tracking-[0.2em] leading-relaxed">Total Classified<br />Issuances</div>
+            </div>
           </div>
 
-          <div className="bg-[#FFFFFF] rounded-[2rem] shadow-sm p-5 group relative overflow-hidden border-2 border-transparent hover:border-[#D4AF37]/40 transition-all">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-[#D4AF37]/5 blur-2xl rounded-full -mr-10 -mt-10 transition-all"></div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="bg-[#F8F9FA] p-2.5 rounded-xl text-[#D4AF37] group-hover:scale-110 group-hover:-rotate-3 transition-transform border border-[#D4AF37]/20">
-                <CheckCircle size={18} />
+          <div className="bg-[#FFFFFF] border border-slate-100 rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-8 group relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(212,175,55,0.06)] hover:-translate-y-1">
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute -top-6 -right-6 text-[#D4AF37]/[0.05] group-hover:text-[#D4AF37]/10 transition-colors transform group-hover:scale-110 group-hover:-rotate-12 duration-500 pointer-events-none">
+              <CheckCircle size={140} strokeWidth={1} />
+            </div>
+            <div className="flex items-center justify-between mb-8 relative z-10">
+              <div className="bg-gradient-to-br from-[#D4AF37]/20 to-[#D4AF37]/5 p-3.5 rounded-2xl text-[#D4AF37] backdrop-blur-md shadow-inner border border-[#D4AF37]/10">
+                <CheckCircle size={24} />
               </div>
             </div>
-            <div className="text-4xl font-black text-[#2B2B2B] tracking-tighter mb-1">{documents.filter(d => d.status === 'Approved').length}</div>
-            <div className="text-sm font-bold text-[#2B2B2B]/60 uppercase tracking-widest leading-none">Official Approved Documents</div>
+            <div className="relative z-10">
+              <div className="text-6xl font-black text-[#2B2B2B] tracking-tighter mb-2">{documents.filter(d => d.status === 'Approved').length}</div>
+              <div className="text-[11px] font-black text-[#2B2B2B]/40 uppercase tracking-[0.2em] leading-relaxed">Official Approved<br />Documents</div>
+            </div>
           </div>
 
-          <div className="bg-[#FFFFFF] rounded-[2rem] shadow-sm p-5 group relative overflow-hidden border-2 border-transparent hover:border-slate-300 transition-all">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-slate-500/5 blur-2xl rounded-full -mr-10 -mt-10 transition-all"></div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="bg-[#F8F9FA] p-2.5 rounded-xl text-[#2B2B2B]/50 group-hover:scale-110 group-hover:rotate-3 transition-transform border border-slate-200">
-                <Archive size={18} />
+          <div className="bg-[#FFFFFF] border border-slate-100 rounded-[2rem] shadow-[0_15px_40px_rgba(0,0,0,0.02)] p-8 group relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_50px_rgba(100,116,139,0.06)] hover:-translate-y-1">
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-slate-400/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+            <div className="absolute -top-6 -right-6 text-slate-400/[0.05] group-hover:text-slate-400/10 transition-colors transform group-hover:scale-110 group-hover:-rotate-12 duration-500 pointer-events-none">
+              <Archive size={140} strokeWidth={1} />
+            </div>
+            <div className="flex items-center justify-between mb-8 relative z-10">
+              <div className="bg-gradient-to-br from-slate-200 to-slate-50 p-3.5 rounded-2xl text-slate-500 backdrop-blur-md shadow-inner border border-slate-200/50">
+                <Archive size={24} />
               </div>
             </div>
-            <div className="text-4xl font-black text-[#2B2B2B] tracking-tighter mb-1">{documents.filter(d => d.status === 'Draft' || !d.status).length}</div>
-            <div className="text-sm font-bold text-[#2B2B2B]/60 uppercase tracking-widest leading-none">Active Unsealed Drafts</div>
+            <div className="relative z-10">
+              <div className="text-6xl font-black text-[#2B2B2B] tracking-tighter mb-2">{documents.filter(d => d.status === 'Draft' || !d.status).length}</div>
+              <div className="text-[11px] font-black text-[#2B2B2B]/40 uppercase tracking-[0.2em] leading-relaxed">Active Unsealed<br />Drafts</div>
+            </div>
           </div>
         </div>
 
         {/* --- REPOSITORY EXPLORER --- */}
         <div className="bg-[#FFFFFF] rounded-[2rem] overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/50">
-          <div className="p-8 border-b border-[#F8F9FA] bg-[#F8F9FA]/80">
-            <div className="flex flex-col xl:flex-row gap-6 items-center">
-              <div className="flex-1 w-full relative group">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#2B2B2B]/40 group-focus-within:text-[#1E5631] transition-colors" size={20} />
+          <div className="p-8 border-b border-slate-100 bg-transparent relative z-10">
+            {/* Unified Search Pill */}
+            <div className="flex flex-col xl:flex-row gap-4 items-center bg-[#FFFFFF] p-2 sm:p-2.5 rounded-3xl sm:rounded-full border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.06)] relative z-20 focus-within:ring-4 focus-within:ring-[#1E5631]/15 focus-within:border-[#1E5631] transition-all">
+              <div className="flex-1 w-full relative group flex items-center h-full min-h-[48px]">
+                <div className="pl-6 pr-2 flex items-center justify-center">
+                  <Search className="text-[#1E5631] animate-[pulse_3s_ease-in-out_infinite]" size={20} />
+                </div>
                 <input
                   type="text"
-                  placeholder="Query repository by subject, series, or issuance type..."
-                  className="w-full pl-14 pr-6 py-4.5 bg-[#FFFFFF] border-2 border-slate-100 rounded-[1.25rem] focus:border-[#1E5631] focus:outline-none transition-all text-[#2B2B2B] font-bold text-sm shadow-sm placeholder:text-[#2B2B2B]/40"
+                  placeholder="Ask for an issuance... (e.g. AO 2026, Salary Memo)"
+                  className="w-full px-2 py-3 bg-transparent border-none focus:outline-none focus:ring-0 text-[#2B2B2B] font-black text-sm sm:text-base placeholder:text-[#2B2B2B]/30 placeholder:font-bold h-full"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="flex gap-3 w-full xl:w-auto">
+
+              <div className="w-full xl:w-auto border-t sm:border-t-0 sm:border-l border-slate-100 pl-0 sm:pl-3 pt-3 sm:pt-0 pb-0 shrink-0">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`flex-1 xl:flex-none flex items-center justify-center gap-3 px-8 py-4.5 rounded-[1.25rem] font-black text-xs uppercase tracking-widest transition-all shadow-md ${showFilters
-                    ? 'bg-[#1E5631] text-[#FFFFFF] shadow-[#1E5631]/20'
-                    : 'bg-[#FFFFFF] border-2 border-slate-100 text-[#2B2B2B] hover:border-[#1E5631] hover:text-[#1E5631]'
+                  className={`w-full xl:w-auto h-[48px] flex items-center justify-center gap-3 px-8 rounded-full font-black text-[11px] uppercase tracking-widest transition-all ${showFilters
+                      ? 'bg-[#1E5631] text-[#FFFFFF] shadow-lg shadow-[#1E5631]/30 rotate-0'
+                      : 'bg-[#F8F9FA] text-[#2B2B2B] hover:bg-[#1E5631]/10 hover:text-[#1E5631]'
                     }`}
                 >
-                  <Filter size={18} /> {showFilters ? 'Hide Parameters' : 'Search Parameters'}
+                  <Filter size={16} />
+                  {showFilters ? 'Active Filters' : 'Tune Search'}
                 </button>
-                {isAdmin && (
-                  <button
-                    onClick={handleExportCSV}
-                    className="flex items-center justify-center gap-3 px-8 py-4.5 bg-[#FFFFFF] border-2 border-slate-100 rounded-[1.25rem] hover:border-[#D4AF37] hover:text-[#D4AF37] font-black text-xs uppercase tracking-widest text-[#2B2B2B] transition-all shadow-md active:scale-95"
-                    title="Export Research Data"
-                  >
-                    <Download size={18} /> Export
-                  </button>
-                )}
               </div>
             </div>
 
             {/* --- PARAMETER TUNING PANEL --- */}
             {showFilters && (
-              <div className="mt-8 pt-8 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
-                <div className="space-y-3">
-                  <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-widest ml-1">Issuance Classification</label>
-                  <select
-                    className="w-full px-5 py-3.5 bg-[#FFFFFF] border-2 border-slate-100 rounded-2xl text-xs font-black text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] transition-all cursor-pointer"
-                    value={filters.type}
-                    onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-                  >
-                    <option value="All Classification">All Categories</option>
-                    <option value="Administrative Order">Administrative Order</option>
-                    <option value="Special Order">Special Order</option>
-                    <option value="Memorandum">Memorandum</option>
-                    <option value="Official Letter">Official Letter</option>
-                  </select>
-                </div>
-                <div className="space-y-3">
-                  <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-widest ml-1">Lifecycle Status</label>
-                  <select
-                    className="w-full px-5 py-3.5 bg-[#FFFFFF] border-2 border-slate-100 rounded-2xl text-xs font-black text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] transition-all cursor-pointer"
-                    value={filters.status}
-                    onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                  >
-                    <option value="All Status">Any Status</option>
-                    <option value="Draft">Drafting Phase</option>
-                    <option value="Pending Review">Awaiting Review</option>
-                    <option value="Approved">Legally Bound (Approved)</option>
-                  </select>
-                </div>
-                <div className="space-y-3">
-                  <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-widest ml-1">Chronological Start</label>
-                  <input
-                    type="date"
-                    className="w-full px-5 py-3.5 bg-[#FFFFFF] border-2 border-slate-100 rounded-2xl text-xs font-black text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] transition-all"
-                    value={filters.dateFrom}
-                    onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
-                  />
-                </div>
-                <div className="flex gap-3 items-end">
-                  <div className="flex-1 space-y-3">
-                    <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-widest ml-1">Chronological End</label>
+              <div className="mt-6 p-8 bg-[#FFFFFF] border border-slate-100 rounded-3xl shadow-xl shadow-slate-200/40 relative overflow-hidden z-10 animate-in fade-in slide-in-from-top-6 duration-300">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E5631]/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+
+                <h3 className="text-xs font-black text-[#1E5631] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                  <Filter size={14} /> Advanced Navigation
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-[#2B2B2B]/50 uppercase tracking-widest">Classification</label>
+                    <div className="relative">
+                      <select
+                        className="w-full pl-5 pr-10 py-4 bg-[#F8F9FA] hover:bg-slate-100 border-none rounded-2xl text-[13px] font-bold text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/15 transition-all appearance-none cursor-pointer"
+                        value={filters.type}
+                        onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+                      >
+                        <option value="All Classification">All Categories</option>
+                        <option value="Administrative Order">Administrative Order</option>
+                        <option value="Special Order">Special Order</option>
+                        <option value="Memorandum">Memorandum</option>
+                        <option value="Official Letter">Official Letter</option>
+                      </select>
+                      <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none">
+                        <div className="w-2 h-2 border-b-2 border-r-2 border-[#1E5631] transform rotate-45 mt-[-4px]"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-[#2B2B2B]/50 uppercase tracking-widest">Lifecycle Status</label>
+                    <div className="relative">
+                      <select
+                        className="w-full pl-5 pr-10 py-4 bg-[#F8F9FA] hover:bg-slate-100 border-none rounded-2xl text-[13px] font-bold text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/15 transition-all appearance-none cursor-pointer"
+                        value={filters.status}
+                        onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                      >
+                        <option value="All Status">Any Status</option>
+                        <option value="Draft">Drafting Phase</option>
+                        <option value="Pending Review">Awaiting Review</option>
+                        <option value="Approved">Legally Bound (Approved)</option>
+                      </select>
+                      <div className="absolute inset-y-0 right-5 flex items-center pointer-events-none">
+                        <div className="w-2 h-2 border-b-2 border-r-2 border-[#1E5631] transform rotate-45 mt-[-4px]"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="block text-[10px] font-black text-[#2B2B2B]/50 uppercase tracking-widest relative z-10">Start Date Limit</label>
                     <input
                       type="date"
-                      className="w-full px-5 py-3.5 bg-[#FFFFFF] border-2 border-slate-100 rounded-2xl text-xs font-black text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] transition-all"
-                      value={filters.dateTo}
-                      onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+                      className="w-full px-5 py-3.5 bg-[#F8F9FA] hover:bg-slate-100 border-none rounded-2xl text-[13px] font-bold text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/15 transition-all outline-none"
+                      value={filters.dateFrom}
+                      onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
                     />
                   </div>
-                  <button
-                    onClick={clearFilters}
-                    className="px-5 py-3.5 bg-[#F8F9FA] hover:bg-slate-200 text-[#2B2B2B] rounded-2xl transition-all shadow-inner h-[52px] w-[52px] flex items-center justify-center shrink-0 border-2 border-slate-100 hover:border-slate-300"
-                    title="Reset Parameters"
-                  >
-                    <RefreshCw size={18} />
-                  </button>
+
+                  <div className="flex gap-3 items-end">
+                    <div className="flex-1 space-y-3 relative z-10">
+                      <label className="block text-[10px] font-black text-[#2B2B2B]/50 uppercase tracking-widest">End Date Limit</label>
+                      <input
+                        type="date"
+                        className="w-full px-5 py-3.5 bg-[#F8F9FA] hover:bg-slate-100 border-none rounded-2xl text-[13px] font-bold text-[#2B2B2B] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/15 transition-all outline-none"
+                        value={filters.dateTo}
+                        onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+                      />
+                    </div>
+                    <button
+                      onClick={clearFilters}
+                      className="h-[52px] px-6 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl transition-all shadow-sm flex items-center justify-center shrink-0 border border-red-100 font-black text-[10px] uppercase tracking-widest gap-2 relative z-10"
+                      title="Clear All"
+                    >
+                      <RefreshCw size={14} /> Clear
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
           {/* --- DATA REPOSITORY TABLE --- */}
-          <div className="overflow-x-auto min-h-[600px] bg-[#FFFFFF]">
+          <div className="overflow-x-auto min-h-[600px] bg-[#FFFFFF] rounded-[2rem] shadow-lg shadow-slate-200/30 border border-slate-100">
             <table className="w-full text-left border-collapse">
-              <thead className="bg-[#F8F9FA] text-[#2B2B2B] uppercase text-[9px] tracking-[0.2em] font-black border-b border-slate-100 sticky top-0 z-10 backdrop-blur-md">
+              <thead className="bg-[#FFFFFF] text-[#2B2B2B]/50 uppercase text-[9px] tracking-[0.25em] font-black border-b border-slate-100 sticky top-0 z-10">
                 <tr>
                   <th className="px-8 py-6 w-[22%]">Record Identity</th>
                   <th className="px-8 py-6 w-[38%]">Formal Subject / Purpose</th>
@@ -487,7 +519,7 @@ const Dashboard = () => {
                     <tr
                       key={doc.id}
                       onClick={() => handleEditOrPrint(doc)}
-                      className="hover:bg-[#1E5631]/5 transition-all group border-l-4 border-l-transparent hover:border-l-[#1E5631] cursor-pointer"
+                      className="hover:bg-[#F8F9FA]/80 transition-all duration-300 group border-l-4 border-l-transparent hover:border-l-[#1E5631] cursor-pointer"
                     >
                       <td className="px-8 py-6">
                         <div className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border mb-2 transition-all shadow-sm ${doc.type === 'Administrative Order' ? 'bg-[#1E5631]/10 text-[#1E5631] border-[#1E5631]/20' :
@@ -565,7 +597,7 @@ const Dashboard = () => {
             <span className="text-[10px] font-black uppercase tracking-widest text-[#1E5631]">Department of Agriculture</span>
           </div>
           <div className="h-4 w-px bg-slate-300"></div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-[#1E5631] opacity-80">DA-MIMAROPA Communication System © 2026</div>
+          <div className="text-[10px] font-black uppercase tracking-widest text-[#1E5631] opacity-80">DA-AMAD Communication System © 2026</div>
         </div>
         <p className="text-[9px] text-[#1E5631] font-bold max-w-3xl mx-auto uppercase tracking-widest leading-relaxed">
           This repository contains sensitive government data. Access is governed by Republic Act No. 10173 (Data Privacy Act of 2012).

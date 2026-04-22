@@ -43,72 +43,74 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen flex flex-col md:flex-row bg-[#F8F9FA] font-sans overflow-hidden">
+    <div className="min-h-screen w-screen flex items-center justify-center font-sans overflow-hidden relative bg-slate-900">
+      {/* Dynamic Ambient Background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[#1E5631]/80 backdrop-blur-[2px] mix-blend-multiply z-10 transition-all"></div>
+        <img src={daBackground} alt="Background" className="w-full h-full object-cover opacity-60 z-0 scale-105" />
 
-      {/* Left Side: Branding & Info (Hidden on mobile) */}
-      <div className="hidden md:flex flex-1 relative overflow-hidden bg-[#1E5631] items-center justify-center p-12">
-        <div className="absolute inset-0 z-0 opacity-20" style={{ backgroundImage: `url(${daBackground})`, backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-        <div className="absolute inset-0 bg-[#1E5631]/40 backdrop-blur-sm z-10"></div>
-        <div className="absolute top-0 left-0 w-full h-full z-15 pointer-events-none opacity-30" style={{ backgroundImage: 'radial-gradient(#D4AF37 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }}></div>
-
-        <div className="relative z-20 max-w-2xl lg:max-w-4xl text-center">
-          <div className="w-56 h-56 bg-[#FFFFFF] rounded-full p-0 mx-auto mb-10 shadow-2xl border-4 border-white/20 transform hover:scale-105 transition-transform duration-500 overflow-hidden flex items-center justify-center">
-            <img src={daLogo} alt="DA Logo" className="w-full h-full object-contain" />
-          </div>
-          <h1 className="text-4xl lg:text-6xl font-black text-white mb-2 tracking-tight leading-tight whitespace-nowrap">
-            Department of <span className="text-[#D4AF37]">Agriculture</span>
-          </h1>
-          <div className="h-1.5 w-24 bg-[#D4AF37] mx-auto mb-4 rounded-full"></div>
-          <div className="space-y-1 mb-10">
-            <p className="text-white text-2xl font-light tracking-wide italic opacity-90">MIMAROPA Regional Field Office</p>
-            <p className="text-[#D4AF37] uppercase tracking-[0.3em] text-sm font-white">Issuance Management System</p>
-          </div>
-        </div>
+        {/* Magical Glowing Orbs */}
+        <div className="absolute top-[10%] right-[15%] w-[40rem] h-[40rem] bg-[#D4AF37]/30 rounded-full blur-[120px] animate-[pulse_6s_ease-in-out_infinite] z-10 pointer-events-none"></div>
+        <div className="absolute -bottom-[10%] -left-[10%] w-[50rem] h-[50rem] bg-[#1E5631]/80 rounded-full blur-[150px] animate-[pulse_8s_ease-in-out_infinite] delay-1000 z-10 pointer-events-none"></div>
       </div>
 
-      {/* Right Side: Authentication Form */}
-      <div className="w-full md:w-[500px] lg:w-[600px] flex items-center justify-center p-8 md:p-12 bg-[#FFFFFF] relative">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E5631]/5 rounded-full blur-[100px] -mr-32 -mt-32 opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D4AF37]/5 rounded-full blur-[100px] -ml-32 -mb-32 opacity-50"></div>
+      {/* Main Glassmorphism Card */}
+      <div className="relative z-20 w-full max-w-[1280px] flex flex-col lg:flex-row rounded-[2.5rem] lg:rounded-[3.5rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] m-4 sm:m-8 lg:m-12 border border-white/20">
 
-        <div className="w-full max-w-lg relative z-10">
-          <div className="md:hidden text-center mb-10">
-            <div className="w-32 h-32 bg-[#FFFFFF] rounded-full p-0 mx-auto mb-5 shadow-lg flex items-center justify-center border-2 border-slate-100 overflow-hidden">
-              <img src={daLogo} alt="DA Logo" className="w-full h-full object-contain" />
+        {/* Left Side: Modern Glass Branding */}
+        <div className="p-12 lg:p-24 flex-[1.2] flex flex-col items-center justify-center text-center relative bg-white/10 backdrop-blur-2xl border-b lg:border-b-0 lg:border-r border-white/20">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent z-0 pointer-events-none"></div>
+
+          {/* Logo Showcase */}
+          <div className="relative z-10 w-48 h-48 lg:w-64 lg:h-64 bg-white/10 backdrop-blur-xl rounded-full p-4 mx-auto mb-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 transform hover:-translate-y-2 transition-transform duration-500 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full bg-[#FFFFFF] rounded-full flex items-center justify-center p-3 shadow-inner">
+              <img src={daLogo} alt="DA Logo" className="w-[90%] h-[90%] object-contain drop-shadow-md" />
             </div>
-            <h2 className="text-2xl font-black text-[#1E5631]">DA-MIMAROPA</h2>
-            <p className="text-[10px] uppercase font-bold text-[#2B2B2B]/40 tracking-widest">Issuance & Correspondence</p>
           </div>
 
-          <div className="mb-10 text-center md:text-left">
-            {isRegistering && (
-              <p className="text-[#2B2B2B]/60 font-medium">
-                Provision a new staff account
-              </p>
-            )}
+          <h1 className="relative z-10 text-5xl lg:text-7xl font-black text-white mb-3 tracking-tighter leading-tight drop-shadow-2xl">
+            Department of <br /><span className="text-[#D4AF37] drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">Agriculture</span>
+          </h1>
+          <div className="relative z-10 h-1.5 w-24 bg-gradient-to-r from-white/10 via-[#D4AF37] to-white/10 mx-auto mb-10 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)]"></div>
+
+          <div className="relative z-10 space-y-1 bg-black/10 px-10 py-5 rounded-3xl backdrop-blur-sm border border-white/10 shadow-xl">
+            <p className="text-white text-xl lg:text-2xl font-light tracking-wide italic">Agribusiness and Marketing Assistance Division</p>
+            <p className="text-[#D4AF37] uppercase tracking-[0.4em] text-[10px] lg:text-[11px] font-black">Communication System</p>
+          </div>
+        </div>
+
+        {/* Right Side: Ultra Clean Premium Form */}
+        <div className="flex-1 p-12 lg:p-24 bg-[#FFFFFF] flex flex-col justify-center relative">
+          <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#1E5631]/5 rounded-full blur-[100px] -mr-64 -mt-64 pointer-events-none"></div>
+
+          <div className="mb-14 relative z-10">
+            <h2 className="text-4xl lg:text-5xl font-black text-[#2B2B2B] tracking-tighter mb-3">Welcome</h2>
+            <p className="text-xs font-bold text-[#2B2B2B]/40 uppercase tracking-[0.3em]">
+              {isRegistering ? 'Provision a new staff account' : 'Verify your credentials to continue'}
+            </p>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-7 relative z-10" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border-2 border-red-100 text-red-700 text-xs font-bold p-4 rounded-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <div className="bg-red-50 border border-red-100 text-red-700 text-[11px] font-black uppercase tracking-widest p-5 rounded-2xl flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-300 shadow-sm">
+                <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]"></div>
                 {error}
               </div>
             )}
 
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div className="group">
-                <label className="block text-[12px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.2em] mb-4 ml-1 transition-colors group-focus-within:text-[#1E5631]">
-                  Email
+                <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.3em] mb-4 ml-2 transition-colors group-focus-within:text-[#1E5631]">
+                  Official Email
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                    <Mail size={20} className="text-[#2B2B2B]/40 group-focus-within:text-[#1E5631] transition-colors" />
+                    <Mail size={18} className="text-[#2B2B2B]/30 group-focus-within:text-[#1E5631] transition-colors" />
                   </div>
                   <input
                     type="email"
                     required
-                    className="block w-full pl-16 pr-6 py-5 bg-[#F8F9FA] border-2 border-[#F8F9FA] text-[#2B2B2B] rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] focus:bg-[#FFFFFF] transition-all font-bold text-base"
+                    className="block w-full pl-16 pr-6 py-6 bg-[#F8F9FA] border-2 border-slate-100 text-[#2B2B2B] rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] focus:bg-[#FFFFFF] transition-all font-bold text-sm shadow-[0_8px_20px_rgba(0,0,0,0.02)] hover:border-slate-200"
                     placeholder="name@da.gov.ph"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -117,17 +119,17 @@ const Login = () => {
               </div>
 
               <div className="group">
-                <label className="block text-[12px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.2em] mb-4 ml-1 transition-colors group-focus-within:text-[#1E5631]">
-                  Password
+                <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.3em] mb-4 ml-2 transition-colors group-focus-within:text-[#1E5631]">
+                  Security Protocol
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                    <Lock size={20} className="text-[#2B2B2B]/40 group-focus-within:text-[#1E5631] transition-colors" />
+                    <Lock size={18} className="text-[#2B2B2B]/30 group-focus-within:text-[#1E5631] transition-colors" />
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
                     required
-                    className="block w-full pl-16 pr-16 py-5 bg-[#F8F9FA] border-2 border-[#F8F9FA] text-[#2B2B2B] rounded-2xl focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] focus:bg-[#FFFFFF] transition-all font-bold text-base"
+                    className="block w-full pl-16 pr-16 py-6 bg-[#F8F9FA] border-2 border-slate-100 text-[#2B2B2B] rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] focus:bg-[#FFFFFF] transition-all font-bold text-sm shadow-[0_8px_20px_rgba(0,0,0,0.02)] hover:border-slate-200 tracking-widest"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -137,7 +139,7 @@ const Login = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-6 flex items-center text-[#2B2B2B]/40 hover:text-[#1E5631] transition-colors"
                   >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
@@ -146,31 +148,37 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full relative flex justify-center items-center gap-3 py-5 bg-[#1E5631] hover:bg-[#153a21] text-[#FFFFFF] text-base font-black rounded-2xl shadow-xl shadow-[#1E5631]/20 active:scale-90 transition-all duration-300 disabled:opacity-70 group overflow-hidden`}
+              className="w-full relative flex justify-center items-center gap-3 py-6 mt-6 bg-gradient-to-r from-[#1E5631] to-[#153a21] hover:from-[#153a21] hover:to-[#0d2a17] text-[#FFFFFF] text-[13px] font-black rounded-[1.5rem] shadow-[0_15px_30px_rgba(30,86,49,0.3)] hover:shadow-[0_20px_40px_rgba(30,86,49,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-70 group overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FFFFFF]/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
               {loading ? (
-                <Loader2 className="animate-spin" size={20} />
+                <Loader2 className="animate-spin" size={18} />
               ) : (
-                isRegistering ? <UserPlus size={20} /> : <LogIn size={20} />
+                isRegistering ? <UserPlus size={18} /> : <LogIn size={18} />
               )}
-              <span className="tracking-widest uppercase">
-                {loading ? (isRegistering ? 'CREATING...' : 'VERIFYING...') : (isRegistering ? 'PROVISION ACCOUNT' : 'SIGN IN')}
+              <span className="tracking-[0.2em] uppercase">
+                {loading ? (isRegistering ? 'Provisioning...' : 'Verifying...') : (isRegistering ? 'Provision Account' : 'Secure Login')}
               </span>
             </button>
 
-          </form>
-
-          <div className="mt-16 bg-[#F8F9FA] border border-slate-200 rounded-2xl p-6 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#D4AF37]"></div>
-            <div className="flex items-center gap-3 mb-3">
-              <ShieldAlert size={18} className="text-[#D4AF37]" />
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#2B2B2B]">System Warning</span>
+            <div className="text-center mt-10 text-[10px] font-black text-[#2B2B2B]/40 uppercase tracking-[0.25em]">
+              {isRegistering ? (
+                <>
+                  Already registered?{' '}
+                  <button type="button" onClick={() => setIsRegistering(false)} className="text-[#1E5631] hover:text-[#D4AF37] transition-colors ml-2 underline underline-offset-4 decoration-[#1E5631]/30 hover:decoration-[#D4AF37]">
+                    Sign In Here
+                  </button>
+                </>
+              ) : (
+                <>
+                  Need an account?{' '}
+                  <button type="button" onClick={() => setIsRegistering(true)} className="text-[#1E5631] hover:text-[#D4AF37] transition-colors ml-2 underline underline-offset-4 decoration-[#1E5631]/30 hover:decoration-[#D4AF37]">
+                    Create Account
+                  </button>
+                </>
+              )}
             </div>
-            <p className="text-[11px] text-[#2B2B2B]/60 font-bold leading-relaxed">
-              This is a <span className="text-[#2B2B2B]">private government system</span>. All activities are monitored and logged. Unauthorized access is strictly prohibited and punishable by law under the <span className="text-[#2B2B2B]">Cybercrime Prevention Act</span>.
-            </p>
-          </div>
+          </form>
         </div>
       </div>
     </div>

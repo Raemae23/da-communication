@@ -5,13 +5,13 @@ import { getAuth } from "firebase/auth";
 
 // TODO: Replace with your actual Firebase project config
 const firebaseConfig = {
-    apiKey: "AIzaSyA8s4O8nCnnrr-ak1-3IOVilsyXZPMqno4",
-    authDomain: "da-mimaropa-system.firebaseapp.com",
-    projectId: "da-mimaropa-system",
-    storageBucket: "da-mimaropa-system.firebasestorage.app",
-    messagingSenderId: "1009450341405",
-    appId: "1:1009450341405:web:a5d0fa1d335174df03a2f4",
-    measurementId: "G-CMZM0CZ1T2"
+    apiKey: "AIzaSyA2WA9ia5btDsPkRbp1rt2HctczeWFZ0QA",
+    authDomain: "amad-communication.firebaseapp.com",
+    projectId: "amad-communication",
+    storageBucket: "amad-communication.firebasestorage.app",
+    messagingSenderId: "754978309440",
+    appId: "1:754978309440:web:a4e6d281ad0abf1f16e6a5",
+    measurementId: "G-9FH3LZ0E1V"
 };
 
 const app = initializeApp(firebaseConfig);

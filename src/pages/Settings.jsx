@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Settings, User, Bell, Shield, Palette,
   Save, Loader2, ArrowLeft,
-  Monitor, Moon, Sun, CheckCircle, AlertCircle
+  Monitor, Moon, Sun, CheckCircle, AlertCircle, Image as ImageIcon
 } from 'lucide-react';
 import { updateUserProfile } from '../services/firebase/auth';
 import { useAuth } from '../context/AuthContext';
@@ -46,43 +46,44 @@ const Settings_Page = () => {
   const [displayName, setDisplayName] = useState(currentUser?.displayName || '');
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMsg, setProfileMsg] = useState(null); // {type:'success'|'error', text}
+  // ── Branding state ──────────────────────────────────────────────────────
+  const [headerPreview, setHeaderPreview] = useState(() => localStorage.getItem('da_custom_header') || null);
+  const [footerPreview, setFooterPreview] = useState(() => localStorage.getItem('da_custom_footer') || null);
 
-
-  // ── Appearance state ───────────────────────────────────────────────────
-  const [theme, setTheme] = useState(() => localStorage.getItem('da_theme') || 'system');
-
-  // ── Notifications state ────────────────────────────────────────────────
-  const [notifs, setNotifs] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('da_notifs')) || {
-        documentUpdates: true,
-        approvals: true,
-        systemAlerts: false,
+  const handleImageUpload = (type, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2.5 * 1024 * 1024) {
+        flash(setProfileMsg, 'error', 'Image is too large. Max 2.5MB allowed.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (type === 'header') {
+          setHeaderPreview(reader.result);
+          localStorage.setItem('da_custom_header', reader.result);
+        } else {
+          setFooterPreview(reader.result);
+          localStorage.setItem('da_custom_footer', reader.result);
+        }
+        flash(setProfileMsg, 'success', `${type === 'header' ? 'Header' : 'Footer'} image updated successfully!`);
       };
-    } catch {
-      return { documentUpdates: true, approvals: true, systemAlerts: false };
+      reader.readAsDataURL(file);
     }
-  });
-  const [notifSaved, setNotifSaved] = useState(false);
+  };
 
-  // ── Apply theme to <html> ──────────────────────────────────────────────
-  useEffect(() => {
-    const root = document.documentElement;
-    const applyTheme = (t) => {
-      if (t === 'dark') root.classList.add('dark');
-      else root.classList.remove('dark');
-    };
-    if (theme === 'system') {
-      const mq = window.matchMedia('(prefers-color-scheme: dark)');
-      applyTheme(mq.matches ? 'dark' : 'light');
-      const handler = (e) => applyTheme(e.matches ? 'dark' : 'light');
-      mq.addEventListener('change', handler);
-      return () => mq.removeEventListener('change', handler);
-    } else {
-      applyTheme(theme);
-    }
-    localStorage.setItem('da_theme', theme);
-  }, [theme]);
+  const resetBranding = (type) => {
+      if (type === 'header') {
+         localStorage.removeItem('da_custom_header');
+         setHeaderPreview(null);
+      } else {
+         localStorage.removeItem('da_custom_footer');
+         setFooterPreview(null);
+      }
+      flash(setProfileMsg, 'success', `${type === 'header' ? 'Header' : 'Footer'} reset to default.`);
+  };
+
+
 
   // ── Helpers ────────────────────────────────────────────────────────────
   const flash = (setter, type, text, duration = 4000) => {
@@ -205,64 +206,62 @@ const Settings_Page = () => {
           </div>
         </SettingsSection>
 
-
-        {/* ── APPEARANCE ───────────────────────────────────────────────────── */}
-        <SettingsSection icon={Palette} title="Appearance" description="Customize your interface theme">
-          <SettingsField label="Theme">
-            <div className="flex gap-3">
-              {[
-                { value: 'light', icon: Sun, label: 'Light' },
-                { value: 'dark', icon: Moon, label: 'Dark' },
-                { value: 'system', icon: Monitor, label: 'System' },
-              ].map(({ value, icon: Icon, label }) => (
-                <button
-                  key={value}
-                  onClick={() => setTheme(value)}
-                  className={`flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl border-2 font-black text-xs uppercase tracking-widest transition-all ${theme === value ? 'bg-[#1E5631]/10 border-[#1E5631] text-[#1E5631]' : 'bg-[#F8F9FA] border-slate-200 text-[#2B2B2B]/40 hover:border-[#1E5631]/50'}`}
-                >
-                  <Icon size={18} />
-                  {label}
-                </button>
-              ))}
+        {/* ── DOCUMENT BRANDING ────────────────────────────────────────────── */}
+        <SettingsSection icon={ImageIcon} title="Document Branding" description="Customize printed document headers and footers">
+          <SettingsField label="Custom Header">
+            <div className="space-y-3">
+              {headerPreview ? (
+                <div className="w-full bg-[#FFFFFF] border-2 border-slate-200 rounded-xl overflow-hidden shadow-inner p-4 relative flex justify-center h-[120px] items-center">
+                  <img src={headerPreview} alt="Header Preview" className="h-full object-contain" />
+                </div>
+              ) : (
+                <div className="w-full bg-[#F8F9FA] border-2 border-dashed border-slate-200 rounded-xl shadow-inner p-4 flex justify-center h-[120px] items-center">
+                   <span className="text-[11px] font-bold text-[#2B2B2B]/40 uppercase tracking-widest">No Custom Header (Using Default)</span>
+                </div>
+              )}
+              <div className="flex items-center gap-3">
+                <label className="flex-1 cursor-pointer bg-[#FFFFFF] border-2 border-dashed border-[#1E5631]/30 hover:border-[#1E5631] hover:bg-[#1E5631]/5 text-center py-3 rounded-2xl transition-all">
+                  <span className="text-[11px] font-black text-[#1E5631] uppercase tracking-widest flex items-center justify-center gap-2">
+                    <ImageIcon size={14} /> Upload Header Image
+                  </span>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload('header', e)} />
+                </label>
+                {headerPreview && (
+                  <button onClick={() => resetBranding('header')} className="px-5 py-3 bg-red-50 text-red-600 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-red-100 transition-all border-2 border-red-100">
+                    Reset
+                  </button>
+                )}
+              </div>
             </div>
           </SettingsField>
-          <p className="text-[11px] text-[#2B2B2B]/60 font-bold ml-1">Theme preference is saved instantly and persists across sessions.</p>
-        </SettingsSection>
 
-        {/* ── NOTIFICATIONS ─────────────────────────────────────────────────── */}
-        <SettingsSection icon={Bell} title="Notifications" description="Control what alerts you receive">
-          {[
-            { key: 'documentUpdates', label: 'Document Updates', desc: 'Get notified when a document is modified' },
-            { key: 'approvals', label: 'Approval Requests', desc: 'Receive alerts when documents need your review' },
-            { key: 'systemAlerts', label: 'System Alerts', desc: 'Maintenance and security notifications' },
-          ].map(({ key, label, desc }) => (
-            <div key={key} className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-black text-[#2B2B2B]">{label}</p>
-                <p className="text-xs text-[#2B2B2B]/60 font-bold">{desc}</p>
+          <SettingsField label="Custom Footer">
+            <div className="space-y-3">
+              {footerPreview ? (
+                <div className="w-full bg-[#FFFFFF] border-2 border-slate-200 rounded-xl overflow-hidden shadow-inner p-4 relative flex justify-center h-[120px] items-center">
+                  <img src={footerPreview} alt="Footer Preview" className="h-full object-contain" />
+                </div>
+              ) : (
+                <div className="w-full bg-[#F8F9FA] border-2 border-dashed border-slate-200 rounded-xl shadow-inner p-4 flex justify-center h-[120px] items-center">
+                   <span className="text-[11px] font-bold text-[#2B2B2B]/40 uppercase tracking-widest">No Custom Footer (Using Default)</span>
+                </div>
+              )}
+              <div className="flex items-center gap-3">
+                <label className="flex-1 cursor-pointer bg-[#FFFFFF] border-2 border-dashed border-[#1E5631]/30 hover:border-[#1E5631] hover:bg-[#1E5631]/5 text-center py-3 rounded-2xl transition-all">
+                  <span className="text-[11px] font-black text-[#1E5631] uppercase tracking-widest flex items-center justify-center gap-2">
+                    <ImageIcon size={14} /> Upload Footer Image
+                  </span>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload('footer', e)} />
+                </label>
+                {footerPreview && (
+                  <button onClick={() => resetBranding('footer')} className="px-5 py-3 bg-red-50 text-red-600 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-red-100 transition-all border-2 border-red-100">
+                    Reset
+                  </button>
+                )}
               </div>
-              <Toggle checked={notifs[key]} onChange={(val) => setNotifs({ ...notifs, [key]: val })} />
             </div>
-          ))}
-          <div className="flex items-center justify-between pt-2">
-            {notifSaved && (
-              <span className="flex items-center gap-2 text-xs font-bold text-[#1E5631]">
-                <CheckCircle size={14} /> Notification preferences saved!
-              </span>
-            )}
-            <div className="ml-auto">
-              <button
-                onClick={handleNotifSave}
-                className="px-8 py-3.5 bg-[#1E5631] hover:bg-[#153a21] text-[#FFFFFF] rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-[#1E5631]/20 active:scale-95 transition-all duration-300 flex items-center gap-2.5"
-              >
-                <Save size={15} /> Save Notifications
-              </button>
-            </div>
-          </div>
+          </SettingsField>
         </SettingsSection>
-
-        {/* Bottom Spacer */}
-        <div className="pb-10" />
       </main>
     </div>
   );

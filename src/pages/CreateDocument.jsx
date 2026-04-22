@@ -145,7 +145,7 @@ const CreateDocument = () => {
     salutation: 'Dear Mayor Dela Cruz:',
     complimentaryClose: 'Sincerely,',
     enclosure: '',
-    signatoryName: 'ATTY. CHRISTOPHER R. BAÑAS',
+    signatoryName: 'Atty. CHRISTOPHER R. BAÑAS',
     signatoryTitle: 'Regional Executive Director',
     reviewerInitials: 'Chiefs Initials',
     reviewerDesignation: 'Division Chief'
@@ -309,29 +309,71 @@ const CreateDocument = () => {
   const handleEditorChange = (index, newContent, editor) => {
     updateContentSection(index, newContent);
 
-    // Small timeout to let the DOM settle before measuring
+    // Small timeout to let the DOM settle before measuring height
     setTimeout(() => {
       try {
         const editorBody = editor?.getBody();
         if (!editorBody) return;
 
-        const contentHeight = editorBody.scrollHeight;
         const isFirstPage = index === 0;
         const maxHeight = getMaxBodyHeight(paperSize, docType, isFirstPage);
 
-        // Only auto-add if this is the LAST page (we don't split mid-document)
-        setFormData(prev => {
-          if (index !== prev.contentSections.length - 1) return prev; // not the last page
-          if (contentHeight <= maxHeight) return prev; // still fits
+        if (editorBody.scrollHeight <= maxHeight) return; // Still fits
 
-          // Content overflows – add a new blank page
-          showToast('Page full — a new page has been added automatically.', 'success');
-          return { ...prev, contentSections: [...prev.contentSections, '<p></p>'] };
+        // OVERFLOW DETECTED!
+        // Pop blocks from the bottom of the current page until it fits
+        const overflowElements = [];
+        
+        while (editorBody.scrollHeight > maxHeight && editorBody.lastChild) {
+           const last = editorBody.lastChild;
+           overflowElements.unshift(last.outerHTML || last.textContent || '');
+           editorBody.removeChild(last);
+        }
+        
+        // Failsafe: if one massive block took up the whole page, leave it so we don't infinitely loop
+        if (editorBody.childNodes.length === 0 && overflowElements.length > 0) {
+           editorBody.innerHTML = overflowElements.shift(); 
+        }
+
+        const newCurrentPageHTML = editorBody.innerHTML;
+        let overflowHTML = overflowElements.join('');
+        if (!overflowHTML.trim()) overflowHTML = '<p></p>';
+
+        setFormData(prev => {
+          const updated = [...prev.contentSections];
+          updated[index] = newCurrentPageHTML; // Update current page without the overflow
+          
+          if (index === updated.length - 1) {
+            // Reached the end, append a new page with the overflowing text
+            updated.push(overflowHTML);
+          } else {
+            // Flow the text into the existing next page
+            updated[index + 1] = overflowHTML + updated[index + 1];
+          }
+          
+          showToast('Text overflowed to the next page!', 'success');
+
+          // Shift focus to the next editor immediately so the user can keep typing seamlessly
+          setTimeout(() => {
+            const nextEditor = editorRefs.current[index + 1];
+            if (nextEditor) {
+               nextEditor.focus();
+               nextEditor.selection.select(nextEditor.getBody(), true);
+               nextEditor.selection.collapse(false); // Move cursor to the very end
+            }
+            const allEditors = document.querySelectorAll('.da-tinymce-editor');
+            if (allEditors.length > 0) {
+               allEditors[allEditors.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 200);
+
+          return { ...prev, contentSections: updated };
         });
+
       } catch (e) {
         // Silently ignore measurement errors
       }
-    }, 100);
+    }, 150);
   };
 
 
@@ -402,26 +444,26 @@ const CreateDocument = () => {
       )}
 
       {/* --- PREMIUM TOP NAVBAR --- */}
-      <nav className="bg-[#FFFFFF] px-8 py-5 shadow-[0_1px_3px_rgba(0,0,0,0.05)] flex justify-between items-center w-full sticky top-0 z-50 border-b border-[#F8F9FA] no-print">
-        <div className="flex items-center gap-5">
-          <div className="bg-[#1E5631] p-2.5 rounded-xl shadow-lg shadow-emerald-900/20">
-            <img src={daLogo} alt="DA Logo" className="h-8 w-8 object-contain" />
+      <nav className="bg-[#1E5631] px-8 sm:px-12 py-5 sm:py-6 shadow-xl shadow-[#1E5631]/20 flex justify-between items-center w-full sticky top-0 z-50 border-b-4 border-[#D4AF37] no-print">
+        <div className="flex items-center gap-6">
+          <div className="bg-[#FFFFFF] p-1.5 rounded-full shadow-md transition-transform hover:scale-105 border-2 border-white/80 shrink-0">
+            <img src={daLogo} alt="DA Logo" className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-xl text-[#2B2B2B] tracking-tight flex items-center gap-2">
-              DA-MIMAROPA
-
-            </span>
-            <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#2B2B2B]/60">Communication Management System</span>
+            <span className="font-black text-2xl sm:text-3xl text-[#FFFFFF] leading-none tracking-tighter">DA-AMAD</span>
+            <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.35em] font-bold text-[#D4AF37] mt-1.5 line-clamp-1">Document System</span>
           </div>
-          <div className="h-8 w-px bg-slate-100 mx-4"></div>
+          <div className="h-8 w-px bg-white/20 mx-2 sm:mx-4"></div>
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2.5 text-[#2B2B2B]/60 hover:text-[#1E5631] font-bold text-sm transition-all group px-4 py-2 rounded-xl hover:bg-[#F8F9FA]"
+            className="flex items-center gap-2.5 text-white/80 hover:text-white font-black text-[10px] sm:text-xs uppercase tracking-widest transition-all group px-4 py-3 rounded-2xl border border-transparent hover:bg-white/10"
           >
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-            Back to Dashboard
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            <span className="hidden sm:inline">Back to Dashboard</span>
           </button>
+        </div>
+        <div className="flex items-center gap-3">
+            {/* Custom Header Actions if needed */}
         </div>
       </nav>
 
@@ -437,23 +479,23 @@ const CreateDocument = () => {
             <div className="space-y-6">
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                <h3 className="text-[11px] font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Workflow Settings</h3>
+                <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Workflow Settings</h3>
               </div>
 
-              <div className="bg-[#FFFFFF] rounded-[2.5rem] border border-[#F8F9FA] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-6 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/10 blur-[50px] rounded-full"></div>
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-[#1E5631]"></div>
+              <div className="bg-[#FFFFFF] rounded-3xl sm:rounded-[2.5rem] border border-slate-100 p-8 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/5 blur-[50px] rounded-full"></div>
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#1E5631] to-[#D4AF37]"></div>
 
                 <div className="grid grid-cols-2 gap-6 relative z-10">
                   <div className="col-span-2">
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1 flex items-center gap-2">
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1 flex items-center gap-2">
                       <Zap size={12} className="text-[#D4AF37]" /> Document Classification
                     </label>
                     <div className="relative group/select">
                       <select
                         value={docType}
                         onChange={(e) => setDocType(e.target.value)}
-                        className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-[#2B2B2B] font-extrabold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-sm"
+                        className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-[#2B2B2B] font-extrabold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-base"
                       >
                         <option value="AO">Administrative Order</option>
                         <option value="SO">Special Order</option>
@@ -465,32 +507,16 @@ const CreateDocument = () => {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Paper Size</label>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Paper Size</label>
                     <div className="relative">
                       <select
                         value={paperSize}
                         onChange={(e) => setPaperSize(e.target.value)}
-                        className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-3.5 text-[#2B2B2B] font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-xs"
+                        className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-3.5 text-[#2B2B2B] font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-sm"
                       >
                         <option value="A4">A4 (Standard)</option>
-                        <option value="Folio">Folio (Long)</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Processing Status</label>
-                    <div className="relative">
-                      <select
-                        value={docStatus}
-                        onChange={(e) => setDocStatus(e.target.value)}
-                        className={`w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-3.5 font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-xs ${docStatus === 'Approved' ? 'text-emerald-700' :
-                          docStatus === 'Pending Review' ? 'text-blue-700' : 'text-amber-700'
-                          }`}
-                      >
-                        <option value="Draft">Draft</option>
-                        <option value="Pending Review">Pending Review</option>
-                        {isAdmin && <option value="Approved">Release (Final)</option>}
+                        <option value="Folio">Folio (Long 8.5"x13")</option>
                       </select>
                     </div>
                   </div>
@@ -504,7 +530,7 @@ const CreateDocument = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-1.5 h-6 bg-[#D4AF37] rounded-full"></div>
-                  <h3 className="text-[11px] font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Issuance Metadata</h3>
+                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Issuance Metadata</h3>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#1E5631]"></span>
@@ -513,30 +539,32 @@ const CreateDocument = () => {
               </div>
 
               {(docType !== 'LETTER') && (
-                <div className="grid grid-cols-2 gap-5 bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)] transition-all hover:bg-[#F8F9FA]/30">
+                <div className="grid grid-cols-2 gap-5 bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] transition-all overflow-hidden relative">
+                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">
                       {docType === 'AO' ? 'AO Number' : docType === 'SO' ? 'SO Number' : 'Memo Number'}
                     </label>
-                    <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all placeholder:text-[#2B2B2B]/40" placeholder="00-00-00" />
+                    <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all placeholder:text-[#2B2B2B]/40" placeholder="00-00-00" />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Series</label>
-                    <input type="number" name="seriesYear" value={formData.seriesYear} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all shadow-sm" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Series</label>
+                    <input type="number" name="seriesYear" value={formData.seriesYear} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all shadow-sm" />
                   </div>
                 </div>
               )}
 
               {docType === 'MEMO' && (
-                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)] space-y-6">
+                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Internal Date Stamp</label>
-                    <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Internal Date Stamp</label>
+                    <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all" />
                   </div>
                   <div className="grid grid-cols-3 gap-5">
                     <div className="col-span-1">
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Type</label>
-                      <select name="memoAddresseeType" value={formData.memoAddresseeType} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] cursor-pointer appearance-none">
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Type</label>
+                      <select name="memoAddresseeType" value={formData.memoAddresseeType} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] cursor-pointer appearance-none">
                         <option value="FOR">FOR</option>
                         <option value="TO">TO</option>
                         <option value="THROUGH">THROUGH</option>
@@ -544,75 +572,77 @@ const CreateDocument = () => {
                       </select>
                     </div>
                     <div className="col-span-2">
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Name</label>
-                      <input type="text" name="memoToName" value={formData.memoToName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Name</label>
+                      <input type="text" name="memoToName" value={formData.memoToName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Title / Position</label>
-                    <input type="text" name="memoToTitle" value={formData.memoToTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="E.g., Division Chief" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Title / Position</label>
+                    <input type="text" name="memoToTitle" value={formData.memoToTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="E.g., Division Chief" />
                   </div>
                 </div>
               )}
 
               {(docType === 'AO' || docType === 'SO' || docType === 'MEMO') && (
-                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)]">
-                  <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Subject Line</label>
-                  <textarea name="subject" value={formData.subject} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-6 py-5 text-sm font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all min-h-[140px] resize-none leading-relaxed" placeholder="ENTER SUBJECT MATTER IN DETAIL..." rows="4" />
+                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                  <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Subject Line</label>
+                  <textarea name="subject" value={formData.subject} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-6 py-5 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all min-h-[140px] resize-none leading-relaxed" placeholder="ENTER SUBJECT MATTER IN DETAIL..." rows="4" />
                 </div>
               )}
 
               {docType === 'LETTER' && (
-                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)] space-y-6">
+                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
+                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
                   <div className="grid grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Date</label>
-                      <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Month DD, YYYY" />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Date</label>
+                      <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Month DD, YYYY" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Salutation</label>
-                      <input type="text" name="salutation" value={formData.salutation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Dear Mayor [Last Name]:" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
-                    <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Name</label>
-                      <input type="text" name="addresseeName" value={formData.addresseeName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="HON. [NAME]" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Designation</label>
-                      <input type="text" name="addresseeTitle" value={formData.addresseeTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="Governor/Congressman/Mayor" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Office / LGU</label>
-                      <input type="text" name="addresseeOffice" value={formData.addresseeOffice} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Local Government Unit of [City]" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Province / Region</label>
-                      <input type="text" name="addresseeLocation" value={formData.addresseeLocation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Province, MIMAROPA Region" />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Salutation</label>
+                      <input type="text" name="salutation" value={formData.salutation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Dear Mayor [Last Name]:" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Name (Optional)</label>
-                      <input type="text" name="thruName" value={formData.thruName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="Leave blank if none" />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Name</label>
+                      <input type="text" name="addresseeName" value={formData.addresseeName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="HON. [NAME]" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Title (Optional)</label>
-                      <input type="text" name="thruTitle" value={formData.thruTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="e.g., Municipal Agriculturist" />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Designation</label>
+                      <input type="text" name="addresseeTitle" value={formData.addresseeTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="Governor/Congressman/Mayor" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Office / LGU</label>
+                      <input type="text" name="addresseeOffice" value={formData.addresseeOffice} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Local Government Unit of [City]" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Province / Region</label>
+                      <input type="text" name="addresseeLocation" value={formData.addresseeLocation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Province, MIMAROPA Region" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Complimentary Close</label>
-                      <input type="text" name="complimentaryClose" value={formData.complimentaryClose} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Sincerely yours," />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Name (Optional)</label>
+                      <input type="text" name="thruName" value={formData.thruName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="Leave blank if none" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Enclosures (Optional)</label>
-                      <input type="text" name="enclosures" value={formData.enclosures} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="List enclosures if any" />
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Title (Optional)</label>
+                      <input type="text" name="thruTitle" value={formData.thruTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="e.g., Municipal Agriculturist" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Complimentary Close</label>
+                      <input type="text" name="complimentaryClose" value={formData.complimentaryClose} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Sincerely yours," />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Enclosures (Optional)</label>
+                      <input type="text" name="enclosures" value={formData.enclosures} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="List enclosures if any" />
                     </div>
                   </div>
                 </div>
@@ -626,7 +656,7 @@ const CreateDocument = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                  <h3 className="text-[11px] font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Editor Workspace</h3>
+                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Editor Workspace</h3>
                 </div>
                 <button
                   type="button"
@@ -705,13 +735,7 @@ const CreateDocument = () => {
                   </div>
                 ))}
 
-                <button
-                  type="button"
-                  onClick={addPage}
-                  className="w-full py-4 border-2 border-dashed border-[#F8F9FA] hover:border-[#1E5631] text-[#2B2B2B]/60 hover:text-[#1E5631] hover:bg-[#1E5631]/5 rounded-[2.5rem] flex items-center justify-center gap-2 text-xs font-black tracking-widest uppercase transition-all"
-                >
-                  <Plus size={16} /> Add New Document Page
-                </button>
+
               </div>
             </div>
 
@@ -720,28 +744,28 @@ const CreateDocument = () => {
 
               <div className="flex items-center gap-3 mb-8 relative z-10">
                 <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                <h3 className="text-[11px] font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Authorization & Review</h3>
+                <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Authorization & Review</h3>
               </div>
 
               <div className="space-y-6 relative z-10">
                 <div className="grid grid-cols-1 gap-6">
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Signatory</label>
-                    <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-sm font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Signatory</label>
+                    <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Signatory Designation</label>
-                    <input type="text" name="signatoryTitle" value={formData.signatoryTitle} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-sm font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Signatory Designation</label>
+                    <input type="text" name="signatoryTitle" value={formData.signatoryTitle} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-5 pt-4 border-t border-[#F8F9FA]">
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Evaluated By (Initials)</label>
-                    <input type="text" name="reviewerInitials" value={formData.reviewerInitials} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Evaluated By (Initials)</label>
+                    <input type="text" name="reviewerInitials" value={formData.reviewerInitials} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Reviewer Role</label>
-                    <input type="text" name="reviewerDesignation" value={formData.reviewerDesignation} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-sm font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Reviewer Role</label>
+                    <input type="text" name="reviewerDesignation" value={formData.reviewerDesignation} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
                   </div>
                 </div>
               </div>

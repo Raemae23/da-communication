@@ -264,3 +264,47 @@ input, select, textarea {
 .da-quill-editor .ql-toolbar.ql-snow button.ql-active .ql-fill {
   fill: #1d4ed8;
 }
+
+/* ===========================
+   GLOBAL DARK MODE OVERRIDES
+   =========================== */
+html.dark {
+  background-color: #0f172a !important; 
+  color: #f8fafc !important;
+}
+
+html.dark body {
+  background-color: #0f172a !important;
+}
+
+/* Backgrounds */
+html.dark .\bg-\\[\\#F8F9FA\\] { background-color: #0f172a !important; }
+html.dark .\bg-\\[\\#FFFFFF\\] { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .\bg-\\[\\#F8F9FA\\]\\/50 { background-color: rgba(15, 23, 42, 0.5) !important; }
+html.dark .\bg-\\[\\#F8F9FA\\]\\/80 { background-color: rgba(30, 41, 59, 0.8) !important; }
+html.dark .\bg-\\[\\#FFFFFF\\]\\/90 { background-color: rgba(30, 41, 59, 0.9) !important; }
+
+/* Typography */
+html.dark .\text-\\[\\#2B2B2B\\] { color: #f8fafc !important; }
+html.dark .\text-\\[\\#2B2B2B\\]\\/80 { color: rgba(248, 250, 252, 0.8) !important; }
+html.dark .\text-\\[\\#2B2B2B\\]\\/60 { color: rgba(248, 250, 252, 0.6) !important; }
+html.dark .\text-\\[\\#2B2B2B\\]\\/40 { color: rgba(248, 250, 252, 0.4) !important; }
+
+/* Borders */
+html.dark .\border-\\[\\#F8F9FA\\] { border-color: #334155 !important; }
+html.dark .\border-slate-200 { border-color: #334155 !important; }
+html.dark .\border-slate-100 { border-color: #1e293b !important; }
+
+/* Main Brand Colors (Adjusted for Dark Visbility) */
+html.dark .\text-\\[\\#1E5631\\] { color: #4ade80 !important; }
+html.dark .\border-\\[\\#1E5631\\] { border-color: #4ade80 !important; }
+html.dark .\hover\\:text-\\[\\#1E5631\\]:hover { color: #4ade80 !important; }
+
+/* Interactive Overrides */
+html.dark .\hover\\:bg-slate-100:hover { background-color: #334155 !important; }
+
+/* TinyMCE Dark mode auto-invert */
+html.dark .tox-tinymce {
+  filter: invert(0.9) hue-rotate(180deg);
+  border-radius: 1rem;
+}
