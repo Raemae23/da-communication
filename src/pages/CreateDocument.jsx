@@ -709,7 +709,7 @@ const CreateDocument = () => {
                     {/* Apply WYSIWYG Editor Styles matching the formatting rules natively inside TinyMCE */}
                     <div className="da-tinymce-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all">
                       <Editor
-                        apiKey="no-api-key"
+                        apiKey="3eaylba29tb3fzrsl4p0zhh45n0s46lk87m54oumiaa3otx6"
                         value={content || ''}
                         onEditorChange={(newContent, editor) => handleEditorChange(index, newContent, editor)}
                         init={{
