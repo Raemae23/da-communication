@@ -323,16 +323,16 @@ const CreateDocument = () => {
         // OVERFLOW DETECTED!
         // Pop blocks from the bottom of the current page until it fits
         const overflowElements = [];
-        
+
         while (editorBody.scrollHeight > maxHeight && editorBody.lastChild) {
-           const last = editorBody.lastChild;
-           overflowElements.unshift(last.outerHTML || last.textContent || '');
-           editorBody.removeChild(last);
+          const last = editorBody.lastChild;
+          overflowElements.unshift(last.outerHTML || last.textContent || '');
+          editorBody.removeChild(last);
         }
-        
+
         // Failsafe: if one massive block took up the whole page, leave it so we don't infinitely loop
         if (editorBody.childNodes.length === 0 && overflowElements.length > 0) {
-           editorBody.innerHTML = overflowElements.shift(); 
+          editorBody.innerHTML = overflowElements.shift();
         }
 
         const newCurrentPageHTML = editorBody.innerHTML;
@@ -342,7 +342,7 @@ const CreateDocument = () => {
         setFormData(prev => {
           const updated = [...prev.contentSections];
           updated[index] = newCurrentPageHTML; // Update current page without the overflow
-          
+
           if (index === updated.length - 1) {
             // Reached the end, append a new page with the overflowing text
             updated.push(overflowHTML);
@@ -350,20 +350,20 @@ const CreateDocument = () => {
             // Flow the text into the existing next page
             updated[index + 1] = overflowHTML + updated[index + 1];
           }
-          
+
           showToast('Text overflowed to the next page!', 'success');
 
           // Shift focus to the next editor immediately so the user can keep typing seamlessly
           setTimeout(() => {
             const nextEditor = editorRefs.current[index + 1];
             if (nextEditor) {
-               nextEditor.focus();
-               nextEditor.selection.select(nextEditor.getBody(), true);
-               nextEditor.selection.collapse(false); // Move cursor to the very end
+              nextEditor.focus();
+              nextEditor.selection.select(nextEditor.getBody(), true);
+              nextEditor.selection.collapse(false); // Move cursor to the very end
             }
             const allEditors = document.querySelectorAll('.da-tinymce-editor');
             if (allEditors.length > 0) {
-               allEditors[allEditors.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+              allEditors[allEditors.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
           }, 200);
 
@@ -463,7 +463,7 @@ const CreateDocument = () => {
           </button>
         </div>
         <div className="flex items-center gap-3">
-            {/* Custom Header Actions if needed */}
+          {/* Custom Header Actions if needed */}
         </div>
       </nav>
 
@@ -540,7 +540,7 @@ const CreateDocument = () => {
 
               {(docType !== 'LETTER') && (
                 <div className="grid grid-cols-2 gap-5 bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] transition-all overflow-hidden relative">
-                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
                   <div>
                     <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">
                       {docType === 'AO' ? 'AO Number' : docType === 'SO' ? 'SO Number' : 'Memo Number'}
@@ -593,7 +593,7 @@ const CreateDocument = () => {
 
               {docType === 'LETTER' && (
                 <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
-                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
                   <div className="grid grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Date</label>
@@ -709,7 +709,7 @@ const CreateDocument = () => {
                     {/* Apply WYSIWYG Editor Styles matching the formatting rules natively inside TinyMCE */}
                     <div className="da-tinymce-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all">
                       <Editor
-                        apiKey="3eaylba29tb3fzrsl4p0zhh45n0s46lk87m54oumiaa3otx6"
+                        apiKey="no-api-key"
                         value={content || ''}
                         onEditorChange={(newContent, editor) => handleEditorChange(index, newContent, editor)}
                         init={{
