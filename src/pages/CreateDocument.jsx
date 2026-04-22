@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Printer, FileText, Save, Loader2, Wand2, CheckCircle, Zap, Plus, Trash2, ZoomIn, ZoomOut, Maximize2, AlertTriangle, XCircle } from 'lucide-react';
+import { ArrowLeft, Printer, FileText, Save, Loader2, Wand2, CheckCircle, Zap, Plus, Trash2, ZoomIn, ZoomOut, Maximize2, AlertTriangle, XCircle, Eye, Edit, UploadCloud } from 'lucide-react';
 // IMPORT FIREBASE FUNCTIONS
 import { saveDocument, updateDocument } from '../services/firebase/firestore';
 
@@ -14,6 +14,7 @@ import Memorandum from '../templates/Memorandum';
 // --- IMPORT REACT-QUILL FOR RICH TEXT EDITING ---
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
+import mammoth from 'mammoth';
 
 import { useAuth } from '../context/AuthContext';
 
@@ -93,7 +94,10 @@ const CreateDocument = () => {
   const [docStatus, setDocStatus] = useState(incomingData?.status || 'Draft');
   const [isSaving, setIsSaving] = useState(false);
   const [isCheckingGrammar, setIsCheckingGrammar] = useState(false);
+  const [isImportingWord, setIsImportingWord] = useState(false);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [scale, setScale] = useState(1); // Scale state for preview
+  const fileInputRef = useRef(null);
   const [manualScale, setManualScale] = useState(null); // null = auto-fit
 
   // --- NEW: Toast Notification State ---
@@ -283,6 +287,31 @@ const CreateDocument = () => {
     setIsSaving(false);
   };
 
+  const handleWordUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setIsImportingWord(true);
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
+      let html = result.value;
+      
+      setFormData(prev => ({
+        ...prev,
+        contentSections: [html, ...prev.contentSections.slice(1)]
+      }));
+      
+      showToast("Word Document imported successfully!", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to read the Word Document.", "error");
+    } finally {
+      setIsImportingWord(false);
+      event.target.value = null; // reset input
+    }
+  };
+
   const currentPaper = PAPER_SIZES[paperSize];
 
   const updateContentSection = (index, newContent) => {
@@ -394,6 +423,15 @@ const CreateDocument = () => {
     `
   });
 
+  useEffect(() => {
+    if (location.state?.autoPrint) {
+      const timer = setTimeout(() => {
+        handlePrint();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state?.autoPrint]);
+
   const insertSnippet = (text) => {
     setFormData(prev => {
       const currentBody = prev.contentSections[0];
@@ -462,9 +500,10 @@ const CreateDocument = () => {
       <div className="flex flex-1 overflow-hidden">
 
         {/* --- LEFT SIDEBAR: FORM PANELS --- */}
-        <div className="w-[480px] min-w-[480px] bg-[#FFFFFF] border-r border-[#F8F9FA] flex flex-col z-10 no-print shadow-[10px_0_30px_-15px_rgba(0,0,0,0.05)]">
+        {!isPreviewMode && (
+          <div className="w-[480px] min-w-[480px] bg-[#FFFFFF] border-r border-[#F8F9FA] flex flex-col z-10 no-print shadow-[10px_0_30px_-15px_rgba(0,0,0,0.05)]">
 
-          <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar bg-[#FFFFFF]">
+            <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar bg-[#FFFFFF]">
 
             {/* Workflow Settings */}
             <div className="space-y-6">
@@ -649,15 +688,27 @@ const CreateDocument = () => {
                   <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
                   <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Editor Workspace</h3>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleAIGrammarCheck}
-                  disabled={isCheckingGrammar}
-                  className="flex items-center gap-2.5 bg-[#1E5631] border border-[#1E5631] text-[#FFFFFF] hover:bg-[#153a21] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest shadow-lg shadow-[#1E5631]/20 transition-all disabled:opacity-50 active:scale-95 group/ai"
-                >
-                  {isCheckingGrammar ? <Loader2 size={14} className="animate-spin" /> : <Wand2 size={14} className="group-hover/ai:rotate-12 transition-transform shadow-sm" />}
-                  {isCheckingGrammar ? 'OPTIMIZING...' : 'AI GRAMMAR ASSISTANT'}
-                </button>
+                <div className="flex gap-3">
+                  <input type="file" accept=".docx" ref={fileInputRef} className="hidden" onChange={handleWordUpload} />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current.click()}
+                    disabled={isImportingWord}
+                    className="flex items-center gap-2.5 bg-[#FFFFFF] border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#b49020] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all disabled:opacity-50 active:scale-95 group/word"
+                  >
+                    {isImportingWord ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} className="group-hover/word:-translate-y-0.5 transition-transform" />}
+                    {isImportingWord ? 'IMPORTING...' : 'IMPORT WORD'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleAIGrammarCheck}
+                    disabled={isCheckingGrammar}
+                    className="flex items-center gap-2.5 bg-[#1E5631] border border-[#1E5631] text-[#FFFFFF] hover:bg-[#153a21] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest shadow-lg shadow-[#1E5631]/20 transition-all disabled:opacity-50 active:scale-95 group/ai"
+                  >
+                    {isCheckingGrammar ? <Loader2 size={14} className="animate-spin" /> : <Wand2 size={14} className="group-hover/ai:rotate-12 transition-transform shadow-sm" />}
+                    {isCheckingGrammar ? 'OPTIMIZING...' : 'AI GRAMMAR'}
+                  </button>
+                </div>
               </div>
 
               {/* --- SMART SNIPPET BAR --- */}
@@ -758,9 +809,10 @@ const CreateDocument = () => {
               </div>
             </div>
 
-            <div className="pb-10"></div> {/* Spacer for scrolling */}
+              <div className="pb-10"></div> {/* Spacer for scrolling */}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* --- RIGHT SIDE: LIVE PREVIEW --- */}
         <div className="flex-1 bg-slate-100/50 relative overflow-hidden flex flex-col no-print">
@@ -831,9 +883,25 @@ const CreateDocument = () => {
             </button>
 
             <button
+              onClick={() => {
+                setIsPreviewMode(!isPreviewMode);
+                if (!isPreviewMode) resetZoom(); // Reset zoom to match new space nicely
+              }}
+              type="button"
+              className={`group flex-1 border-2 font-black py-4.5 rounded-[1.5rem] shadow-sm flex justify-center items-center gap-3 text-[11px] tracking-[0.2em] uppercase transition-all active:scale-95 ${isPreviewMode 
+                ? 'bg-[#1E5631]/10 border-[#1E5631]/20 text-[#1E5631]' 
+                : 'bg-[#FFFFFF] border-[#F8F9FA] hover:border-[#D4AF37] hover:text-[#D4AF37] text-[#2B2B2B]/60'}`}
+            >
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isPreviewMode ? 'bg-[#1E5631]/20' : 'bg-[#F8F9FA] group-hover:bg-[#D4AF37]/10'}`}>
+                {isPreviewMode ? <Edit size={16} className="group-hover:scale-110 transition-transform" /> : <Eye size={16} className="group-hover:scale-110 transition-transform" />}
+              </div>
+              {isPreviewMode ? "Exit Preview" : "Preview"}
+            </button>
+
+            <button
               onClick={handlePrint}
               type="button"
-              className="group flex-[1] bg-[#1E5631] text-[#FFFFFF] hover:brightness-110 text-[#FFFFFF] font-black py-4.5 rounded-[1.5rem] shadow-2xl shadow-[#1E5631]/20 flex justify-center items-center gap-4 text-[11px] tracking-[0.2em] uppercase transition-all hover:-translate-y-1 active:scale-95"
+              className="group flex-[1.5] bg-[#1E5631] text-[#FFFFFF] hover:brightness-110 font-black py-4.5 rounded-[1.5rem] shadow-2xl shadow-[#1E5631]/20 flex justify-center items-center gap-4 text-[11px] tracking-[0.2em] uppercase transition-all hover:-translate-y-1 active:scale-95"
             >
               <div className="w-8 h-8 rounded-xl bg-[#FFFFFF]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Printer size={20} />

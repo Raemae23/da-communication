@@ -122,6 +122,17 @@ const Dashboard = () => {
     });
   };
 
+  const handleDirectPrint = (doc) => {
+    const docTypeCode = getDocTypeCode(doc.type);
+    navigate('/create', {
+      state: {
+        defaultType: docTypeCode,
+        editData: doc,
+        autoPrint: true
+      }
+    });
+  };
+
   const handleDuplicate = (doc) => {
     // 1. Copy the document data
     const docCopy = { ...doc };
@@ -565,20 +576,15 @@ const Dashboard = () => {
                       </td>
                       <td className="px-8 py-6" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end gap-2 opacity-20 group-hover:opacity-100 transition-all">
-                          <button onClick={(e) => { e.stopPropagation(); handleEditOrPrint(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-[#1E5631] hover:border-[#1E5631] hover:bg-[#1E5631]/5 rounded-xl transition-all shadow-sm" title="Edit Metadata">
+                          <button onClick={(e) => { e.stopPropagation(); handleEditOrPrint(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-[#1E5631] hover:border-[#1E5631] hover:bg-[#1E5631]/5 rounded-xl transition-all shadow-sm" title="Edit Document">
                             <Edit size={16} />
                           </button>
-                          <button onClick={(e) => { e.stopPropagation(); handleDuplicate(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 rounded-xl transition-all shadow-sm" title="Clone Record">
-                            <Copy size={16} />
-                          </button>
-                          <button onClick={(e) => { e.stopPropagation(); handleEditOrPrint(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-[#1E5631] hover:border-[#1E5631] hover:bg-[#1E5631]/5 rounded-xl transition-all shadow-sm" title="Provision Official Document">
+                          <button onClick={(e) => { e.stopPropagation(); handleDirectPrint(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-[#1E5631] hover:border-[#1E5631] hover:bg-[#1E5631]/5 rounded-xl transition-all shadow-sm" title="Print Document">
                             <Printer size={16} />
                           </button>
-                          {isAdmin && (
-                            <button onClick={(e) => { e.stopPropagation(); handleDeleteTrigger(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-red-700 hover:border-red-700 hover:bg-red-50 rounded-xl transition-all shadow-sm" title="Expunge Data">
-                              <Trash2 size={16} />
-                            </button>
-                          )}
+                          <button onClick={(e) => { e.stopPropagation(); handleDeleteTrigger(doc); }} className="p-3 bg-[#FFFFFF] border border-slate-200 text-[#2B2B2B]/40 hover:text-red-700 hover:border-red-700 hover:bg-red-50 rounded-xl transition-all shadow-sm" title="Delete Document">
+                            <Trash2 size={16} />
+                          </button>
                         </div>
                       </td>
                     </tr>
