@@ -11,8 +11,9 @@ import SpecialOrder from '../templates/SpecialOrder';
 import OfficialLetter from '../templates/OfficialLetter';
 import Memorandum from '../templates/Memorandum';
 
-// --- IMPORT TINYMCE FOR RICH TEXT EDITING ---
-import { Editor } from '@tinymce/tinymce-react';
+// --- IMPORT REACT-QUILL FOR RICH TEXT EDITING ---
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 import { useAuth } from '../context/AuthContext';
 
@@ -305,73 +306,47 @@ const CreateDocument = () => {
     });
   };
 
-  // --- AUTO-PAGE: Called on every TinyMCE content change ---
-  const handleEditorChange = (index, newContent, editor) => {
+  // --- AUTO-PAGE: Called on every Quill content change ---
+  const handleEditorChange = (index, newContent) => {
     updateContentSection(index, newContent);
 
     // Small timeout to let the DOM settle before measuring height
     setTimeout(() => {
       try {
-        const editorBody = editor?.getBody();
-        if (!editorBody) return;
+        const editorContainer = document.querySelectorAll('.ql-editor')[index];
+        if (!editorContainer) return;
 
         const isFirstPage = index === 0;
         const maxHeight = getMaxBodyHeight(paperSize, docType, isFirstPage);
 
-        if (editorBody.scrollHeight <= maxHeight) return; // Still fits
+        if (editorContainer.scrollHeight <= maxHeight) return; // Still fits
 
         // OVERFLOW DETECTED!
-        // Pop blocks from the bottom of the current page until it fits
-        const overflowElements = [];
+        // We'll move the last element to the next page
+        const lastChild = editorContainer.lastElementChild;
+        if (!lastChild) return;
 
-        while (editorBody.scrollHeight > maxHeight && editorBody.lastChild) {
-          const last = editorBody.lastChild;
-          overflowElements.unshift(last.outerHTML || last.textContent || '');
-          editorBody.removeChild(last);
-        }
+        const overflowHTML = lastChild.outerHTML;
+        editorContainer.removeChild(lastChild);
 
-        // Failsafe: if one massive block took up the whole page, leave it so we don't infinitely loop
-        if (editorBody.childNodes.length === 0 && overflowElements.length > 0) {
-          editorBody.innerHTML = overflowElements.shift();
-        }
-
-        const newCurrentPageHTML = editorBody.innerHTML;
-        let overflowHTML = overflowElements.join('');
-        if (!overflowHTML.trim()) overflowHTML = '<p></p>';
+        const newCurrentPageHTML = editorContainer.innerHTML;
 
         setFormData(prev => {
           const updated = [...prev.contentSections];
-          updated[index] = newCurrentPageHTML; // Update current page without the overflow
+          updated[index] = newCurrentPageHTML;
 
           if (index === updated.length - 1) {
-            // Reached the end, append a new page with the overflowing text
             updated.push(overflowHTML);
           } else {
-            // Flow the text into the existing next page
             updated[index + 1] = overflowHTML + updated[index + 1];
           }
 
           showToast('Text overflowed to the next page!', 'success');
-
-          // Shift focus to the next editor immediately so the user can keep typing seamlessly
-          setTimeout(() => {
-            const nextEditor = editorRefs.current[index + 1];
-            if (nextEditor) {
-              nextEditor.focus();
-              nextEditor.selection.select(nextEditor.getBody(), true);
-              nextEditor.selection.collapse(false); // Move cursor to the very end
-            }
-            const allEditors = document.querySelectorAll('.da-tinymce-editor');
-            if (allEditors.length > 0) {
-              allEditors[allEditors.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-          }, 200);
-
           return { ...prev, contentSections: updated };
         });
 
       } catch (e) {
-        // Silently ignore measurement errors
+        console.error("Pagination error:", e);
       }
     }, 150);
   };
@@ -707,28 +682,22 @@ const CreateDocument = () => {
                       )}
                     </div>
                     {/* Apply WYSIWYG Editor Styles matching the formatting rules natively inside TinyMCE */}
-                    <div className="da-tinymce-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all">
-                      <Editor
-                        apiKey="3eaylba29tb3fzrsl4p0zhh45n0s46lk87m54oumiaa3otx6"
+                    {/* ReactQuill Editor */}
+                    <div className="da-quill-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all bg-white">
+                      <ReactQuill
+                        theme="snow"
                         value={content || ''}
-                        onEditorChange={(newContent, editor) => handleEditorChange(index, newContent, editor)}
-                        init={{
-                          height: 500,
-                          menubar: false,
-                          plugins: ['lists', 'advlist', 'autolink', 'table', 'pagebreak'],
-                          toolbar: 'fontfamily fontsize lineheight | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | table | pagebreak',
-                          font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 24pt 36pt',
-                          font_family_formats: 'Times New Roman=times new roman,times,serif; Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace; Georgia=georgia,palatino,serif; Tahoma=tahoma,arial,helvetica,sans-serif; Verdana=verdana,geneva,sans-serif;',
-                          line_height_formats: '0 0.5 0.8 1 1.15 1.5 2.0 2.5 3.0',
-                          content_style: `
-                            body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; color: #1e293b; background-color: #ffffff; padding: 2rem;}
-                            ${(docType === 'AO' || docType === 'SO' || docType === 'MEMO' || docType === 'LETTER') ? 'p, li { text-align: justify; line-height: 1.15; margin-top: 0; margin-bottom: 0; }' : 'p { margin-top: 0; margin-bottom: 0; }'}
-                            .mce-pagebreak { margin: 10px 0; border: 1px dashed #cbd5e1; }
-                          `,
-                          placeholder: `Start typing page ${index + 1} content here...`,
-                          setup: (ed) => {
-                            editorRefs.current[index] = ed;
-                          }
+                        onChange={(newContent) => handleEditorChange(index, newContent)}
+                        placeholder={`Start typing page ${index + 1} content here...`}
+                        modules={{
+                          toolbar: [
+                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                            [{ 'align': [] }],
+                            ['clean']
+                          ],
                         }}
                       />
                     </div>

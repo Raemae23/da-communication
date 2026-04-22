@@ -234,23 +234,33 @@ textarea {
 }
 
 /* Editor content area */
+.da-quill-editor .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid #F8F9FA;
+  background: #F8F9FA/50;
+  padding: 12px 20px;
+  border-radius: 1.5rem 1.5rem 0 0;
+}
+
 .da-quill-editor .ql-container.ql-snow {
   border: none;
-  font-size: 12pt;
-  line-height: 1.5;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 11pt;
 }
 
 .da-quill-editor .ql-editor {
-  padding: 20px 24px;
-  min-height: 400px;
-  font-family: 'Cambria', serif;
+  padding: 40px;
+  min-height: 500px;
+  line-height: 1.5;
   color: #1e293b;
 }
 
 .da-quill-editor .ql-editor.ql-blank::before {
+  left: 40px;
+  top: 40px;
   font-style: italic;
   color: #94a3b8;
-  font-size: 11pt;
+  opacity: 0.6;
 }
 
 /* Blockquote style */
@@ -367,14 +377,4 @@ html.dark .hover\:bg-slate-100:hover {
 html.dark .tox-tinymce {
   filter: invert(0.9) hue-rotate(180deg);
   border-radius: 1rem;
-}
-
-/* Hide TinyMCE 'Domain not registered' warnings */
-.tox-notifications-container {
-  display: none !important;
-}
-
-/* Hide TinyMCE branding in the status bar */
-.tox-statusbar__branding {
-  display: none !important;
 }
