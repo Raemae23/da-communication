@@ -387,7 +387,7 @@ const Dashboard = () => {
                     }`}
                 >
                   <Filter size={16} />
-                  {showFilters ? 'Active Filters' : 'Tune Search'}
+                  {showFilters ? 'Active Filters' : 'Search'}
                 </button>
               </div>
             </div>
