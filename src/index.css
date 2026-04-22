@@ -236,31 +236,33 @@ textarea {
 /* Editor content area */
 .da-quill-editor .ql-toolbar.ql-snow {
   border: none;
-  border-bottom: 1px solid #F8F9FA;
-  background: #F8F9FA/50;
-  padding: 12px 20px;
-  border-radius: 1.5rem 1.5rem 0 0;
+  border-bottom: 1px solid #F1F5F9;
+  background: rgba(248, 249, 250, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 16px 24px;
+  border-radius: 2rem 2rem 0 0;
 }
 
 .da-quill-editor .ql-container.ql-snow {
   border: none;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 11pt;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12pt;
+  background: white;
 }
 
 .da-quill-editor .ql-editor {
-  padding: 40px;
-  min-height: 500px;
-  line-height: 1.5;
+  padding: 50px 60px;
+  min-height: 600px;
+  line-height: 1.6;
   color: #1e293b;
 }
 
 .da-quill-editor .ql-editor.ql-blank::before {
-  left: 40px;
-  top: 40px;
+  left: 60px;
+  top: 50px;
   font-style: italic;
   color: #94a3b8;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* Blockquote style */
@@ -377,4 +379,38 @@ html.dark .hover\:bg-slate-100:hover {
 html.dark .tox-tinymce {
   filter: invert(0.9) hue-rotate(180deg);
   border-radius: 1rem;
+}
+
+/* ReactQuill Dark Mode Support */
+html.dark .da-quill-editor {
+  border-color: #334155 !important;
+}
+
+html.dark .ql-toolbar.ql-snow {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border-bottom-color: #334155 !important;
+}
+
+html.dark .ql-toolbar.ql-snow .ql-stroke {
+  stroke: #f8fafc !important;
+}
+
+html.dark .ql-toolbar.ql-snow .ql-fill {
+  fill: #f8fafc !important;
+}
+
+html.dark .ql-toolbar.ql-snow .ql-picker {
+  color: #f8fafc !important;
+}
+
+html.dark .ql-container.ql-snow {
+  background: #1e293b !important;
+}
+
+html.dark .ql-editor {
+  color: #f8fafc !important;
+}
+
+html.dark .ql-editor.ql-blank::before {
+  color: rgba(248, 250, 252, 0.4) !important;
 }

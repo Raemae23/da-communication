@@ -342,6 +342,22 @@ const CreateDocument = () => {
           }
 
           showToast('Text overflowed to the next page!', 'success');
+          
+          // Focus shift logic for Quill
+          setTimeout(() => {
+            const allEditors = document.querySelectorAll('.ql-editor');
+            if (allEditors.length > 0 && allEditors[index + 1]) {
+              const nextEditor = allEditors[index + 1];
+              nextEditor.focus();
+              const range = document.createRange();
+              range.selectNodeContents(nextEditor);
+              range.collapse(false);
+              const selection = window.getSelection();
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }
+          }, 200);
+
           return { ...prev, contentSections: updated };
         });
 
@@ -691,11 +707,13 @@ const CreateDocument = () => {
                         placeholder={`Start typing page ${index + 1} content here...`}
                         modules={{
                           toolbar: [
-                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }, { 'header': [1, 2, 3, 4, 5, 6, false] }],
                             ['bold', 'italic', 'underline', 'strike'],
                             [{ 'color': [] }, { 'background': [] }],
-                            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                            [{ 'align': [] }],
+                            [{ 'script': 'sub' }, { 'script': 'super' }],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                            [{ 'direction': 'rtl' }, { 'align': [] }],
+                            ['link', 'blockquote', 'code-block'],
                             ['clean']
                           ],
                         }}
