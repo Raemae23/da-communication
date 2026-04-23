@@ -86,7 +86,7 @@ const Login = () => {
           <div className="mb-14 relative z-10">
             <h2 className="text-4xl lg:text-5xl font-black text-[#2B2B2B] tracking-tighter mb-3">Welcome</h2>
             <p className="text-xs font-bold text-[#2B2B2B]/40 uppercase tracking-[0.3em]">
-              {isRegistering ? 'Provision a new staff account' : 'Verify your credentials to continue'}
+              {isRegistering ? 'Create a new staff account' : 'Verify your credentials to continue'}
             </p>
           </div>
 
@@ -157,7 +157,7 @@ const Login = () => {
                 isRegistering ? <UserPlus size={18} /> : <LogIn size={18} />
               )}
               <span className="tracking-[0.2em] uppercase">
-                {loading ? (isRegistering ? 'Provisioning...' : 'Verifying...') : (isRegistering ? 'Provision Account' : 'Secure Login')}
+                {loading ? (isRegistering ? 'Creating...' : 'Verifying...') : (isRegistering ? 'Create Account' : 'Secure Login')}
               </span>
             </button>
 
