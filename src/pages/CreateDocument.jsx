@@ -296,12 +296,12 @@ const CreateDocument = () => {
       const arrayBuffer = await file.arrayBuffer();
       const result = await mammoth.convertToHtml({ arrayBuffer: arrayBuffer });
       let html = result.value;
-      
+
       setFormData(prev => ({
         ...prev,
         contentSections: [html, ...prev.contentSections.slice(1)]
       }));
-      
+
       showToast("Word Document imported successfully!", "success");
     } catch (err) {
       console.error(err);
@@ -371,7 +371,7 @@ const CreateDocument = () => {
           }
 
           showToast('Text overflowed to the next page!', 'success');
-          
+
           // Focus shift logic for Quill
           setTimeout(() => {
             const allEditors = document.querySelectorAll('.ql-editor');
@@ -505,309 +505,309 @@ const CreateDocument = () => {
 
             <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar bg-[#FFFFFF]">
 
-            {/* Workflow Settings */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Workflow Settings</h3>
-              </div>
-
-              <div className="bg-[#FFFFFF] rounded-3xl sm:rounded-[2.5rem] border border-slate-100 p-8 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/5 blur-[50px] rounded-full"></div>
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#1E5631] to-[#D4AF37]"></div>
-
-                <div className="grid grid-cols-2 gap-6 relative z-10">
-                  <div className="col-span-2">
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1 flex items-center gap-2">
-                      <Zap size={12} className="text-[#D4AF37]" /> Document Classification
-                    </label>
-                    <div className="relative group/select">
-                      <select
-                        value={docType}
-                        onChange={(e) => setDocType(e.target.value)}
-                        className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-[#2B2B2B] font-extrabold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-base"
-                      >
-                        <option value="AO">Administrative Order</option>
-                        <option value="SO">Special Order</option>
-                        <option value="MEMO">Memorandum</option>
-                        <option value="LETTER">Official Letter</option>
-                      </select>
-                      <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#2B2B2B]/60 group-focus-within/select:text-[#1E5631] transition-colors">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-span-2">
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Paper Size</label>
-                    <div className="relative">
-                      <select
-                        value={paperSize}
-                        onChange={(e) => setPaperSize(e.target.value)}
-                        className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-3.5 text-[#2B2B2B] font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-sm"
-                      >
-                        <option value="A4">A4 (Standard)</option>
-                        <option value="Folio">Folio (Long 8.5"x13")</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="h-px bg-slate-100 mx-4"></div>
-
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-6 bg-[#D4AF37] rounded-full"></div>
-                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Issuance Metadata</h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#1E5631]"></span>
-                  <span className="text-[10px] text-[#2B2B2B]/60 font-bold tracking-widest uppercase italic">Header Records</span>
-                </div>
-              </div>
-
-              {(docType !== 'LETTER') && (
-                <div className="grid grid-cols-2 gap-5 bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] transition-all overflow-hidden relative">
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">
-                      {docType === 'AO' ? 'AO Number' : docType === 'SO' ? 'SO Number' : 'Memo Number'}
-                    </label>
-                    <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all placeholder:text-[#2B2B2B]/40" placeholder="00-00-00" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Series</label>
-                    <input type="number" name="seriesYear" value={formData.seriesYear} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all shadow-sm" />
-                  </div>
-                </div>
-              )}
-
-              {docType === 'MEMO' && (
-                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Internal Date Stamp</label>
-                    <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all" />
-                  </div>
-                  <div className="grid grid-cols-3 gap-5">
-                    <div className="col-span-1">
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Type</label>
-                      <select name="memoAddresseeType" value={formData.memoAddresseeType} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] cursor-pointer appearance-none">
-                        <option value="FOR">FOR</option>
-                        <option value="TO">TO</option>
-                        <option value="THROUGH">THROUGH</option>
-                        <option value="ATTENTION">ATTENTION</option>
-                      </select>
-                    </div>
-                    <div className="col-span-2">
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Name</label>
-                      <input type="text" name="memoToName" value={formData.memoToName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Title / Position</label>
-                    <input type="text" name="memoToTitle" value={formData.memoToTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="E.g., Division Chief" />
-                  </div>
-                </div>
-              )}
-
-              {(docType === 'AO' || docType === 'SO' || docType === 'MEMO') && (
-                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
-                  <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Subject Line</label>
-                  <textarea name="subject" value={formData.subject} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-6 py-5 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all min-h-[140px] resize-none leading-relaxed" placeholder="ENTER SUBJECT MATTER IN DETAIL..." rows="4" />
-                </div>
-              )}
-
-              {docType === 'LETTER' && (
-                <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
-                  <div className="grid grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Date</label>
-                      <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Month DD, YYYY" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Salutation</label>
-                      <input type="text" name="salutation" value={formData.salutation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Dear Mayor [Last Name]:" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Name</label>
-                      <input type="text" name="addresseeName" value={formData.addresseeName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="HON. [NAME]" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Designation</label>
-                      <input type="text" name="addresseeTitle" value={formData.addresseeTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="Governor/Congressman/Mayor" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Office / LGU</label>
-                      <input type="text" name="addresseeOffice" value={formData.addresseeOffice} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Local Government Unit of [City]" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Province / Region</label>
-                      <input type="text" name="addresseeLocation" value={formData.addresseeLocation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Province, MIMAROPA Region" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Name (Optional)</label>
-                      <input type="text" name="thruName" value={formData.thruName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="Leave blank if none" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Title (Optional)</label>
-                      <input type="text" name="thruTitle" value={formData.thruTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="e.g., Municipal Agriculturist" />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Complimentary Close</label>
-                      <input type="text" name="complimentaryClose" value={formData.complimentaryClose} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Sincerely yours," />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Enclosures (Optional)</label>
-                      <input type="text" name="enclosures" value={formData.enclosures} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="List enclosures if any" />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <hr className="border-gray-200" />
-
-            {/* Editor Workspace Panel */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
+              {/* Workflow Settings */}
+              <div className="space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Editor Workspace</h3>
+                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Workflow Settings</h3>
                 </div>
-                <div className="flex gap-3">
-                  <input type="file" accept=".docx" ref={fileInputRef} className="hidden" onChange={handleWordUpload} />
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current.click()}
-                    disabled={isImportingWord}
-                    className="flex items-center gap-2.5 bg-[#FFFFFF] border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#b49020] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all disabled:opacity-50 active:scale-95 group/word"
-                  >
-                    {isImportingWord ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} className="group-hover/word:-translate-y-0.5 transition-transform" />}
-                    {isImportingWord ? 'IMPORTING...' : 'IMPORT WORD'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleAIGrammarCheck}
-                    disabled={isCheckingGrammar}
-                    className="flex items-center gap-2.5 bg-[#1E5631] border border-[#1E5631] text-[#FFFFFF] hover:bg-[#153a21] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest shadow-lg shadow-[#1E5631]/20 transition-all disabled:opacity-50 active:scale-95 group/ai"
-                  >
-                    {isCheckingGrammar ? <Loader2 size={14} className="animate-spin" /> : <Wand2 size={14} className="group-hover/ai:rotate-12 transition-transform shadow-sm" />}
-                    {isCheckingGrammar ? 'OPTIMIZING...' : 'AI GRAMMAR'}
-                  </button>
-                </div>
-              </div>
 
-              {/* --- SMART SNIPPET BAR --- */}
-              <div className="bg-slate-900/5 p-4 rounded-2xl border border-[#F8F9FA]/60 flex flex-wrap gap-2">
-                <div className="w-full mb-1 flex items-center gap-2 px-1">
-                  <Zap size={10} className="text-[#D4AF37] fill-[#D4AF37]" />
-                  <span className="text-[9px] font-black text-[#2B2B2B]/60 uppercase tracking-widest">Rapid Insertion Snippets</span>
-                </div>
-                {SNIPPETS[docType]?.map((snip, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => insertSnippet(snip)}
-                    className="bg-[#FFFFFF] border border-[#F8F9FA] hover:border-[#1E5631] hover:text-[#1E5631] px-3 py-1.5 rounded-lg text-[10px] font-bold text-[#2B2B2B]/60 transition-all active:scale-95 shadow-sm"
-                  >
-                    {snip.length > 25 ? snip.substring(0, 25) + "..." : snip}
-                  </button>
-                ))}
-              </div>
+                <div className="bg-[#FFFFFF] rounded-3xl sm:rounded-[2.5rem] border border-slate-100 p-8 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/5 blur-[50px] rounded-full"></div>
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#1E5631] to-[#D4AF37]"></div>
 
-              {/* PAGE EDITORS */}
-              <div className="space-y-6">
-                {formData.contentSections.map((content, index) => (
-                  <div key={index} className="bg-[#FFFFFF] rounded-[2.5rem] border border-[#F8F9FA] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.04)] focus-within:ring-8 focus-within:ring-[#1E5631]/10 focus-within:border-[#1E5631] transition-all">
-                    <div className="bg-[#F8F9FA]/80 px-8 py-4 border-b border-[#F8F9FA] flex justify-between items-center">
-                      <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-lg bg-[#1E5631] text-[#FFFFFF] flex items-center justify-center text-xs font-black shadow-lg shadow-[#1E5631]/20">{index + 1}</span>
-                        <span className="text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.2em]">Document Page {index + 1}</span>
-                      </div>
-                      {formData.contentSections.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removePage(index)}
-                          className="flex items-center gap-2 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-widest transition-all"
+                  <div className="grid grid-cols-2 gap-6 relative z-10">
+                    <div className="col-span-2">
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1 flex items-center gap-2">
+                        <Zap size={12} className="text-[#D4AF37]" /> Document Classification
+                      </label>
+                      <div className="relative group/select">
+                        <select
+                          value={docType}
+                          onChange={(e) => setDocType(e.target.value)}
+                          className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-[#2B2B2B] font-extrabold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-base"
                         >
-                          <Trash2 size={12} /> Remove
-                        </button>
-                      )}
+                          <option value="AO">Administrative Order</option>
+                          <option value="SO">Special Order</option>
+                          <option value="MEMO">Memorandum</option>
+                          <option value="LETTER">Official Letter</option>
+                        </select>
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#2B2B2B]/60 group-focus-within/select:text-[#1E5631] transition-colors">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                        </div>
+                      </div>
                     </div>
-                    {/* Apply WYSIWYG Editor Styles matching the formatting rules natively inside TinyMCE */}
-                    {/* ReactQuill Editor */}
-                    <div className="da-quill-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all bg-white">
-                      <ReactQuill
-                        theme="snow"
-                        value={content || ''}
-                        onChange={(newContent) => handleEditorChange(index, newContent)}
-                        placeholder={`Start typing page ${index + 1} content here...`}
-                        modules={{
-                          toolbar: [
-                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }, { 'header': [1, 2, 3, 4, 5, 6, false] }],
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{ 'color': [] }, { 'background': [] }],
-                            [{ 'script': 'sub' }, { 'script': 'super' }],
-                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                            [{ 'direction': 'rtl' }, { 'align': [] }],
-                            ['link', 'blockquote', 'code-block'],
-                            ['clean']
-                          ],
-                        }}
-                      />
+                    <div className="col-span-2">
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Paper Size</label>
+                      <div className="relative">
+                        <select
+                          value={paperSize}
+                          onChange={(e) => setPaperSize(e.target.value)}
+                          className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-3.5 text-[#2B2B2B] font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-sm"
+                        >
+                          <option value="A4">A4 (Standard)</option>
+                          <option value="Folio">Folio (Long 8.5"x13")</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                ))}
-
-
-              </div>
-            </div>
-
-            <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)] relative overflow-hidden group/sig">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/10 blur-[60px] rounded-full group-hover/sig:bg-[#1E5631]/10 transition-all"></div>
-
-              <div className="flex items-center gap-3 mb-8 relative z-10">
-                <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Authorization & Review</h3>
-              </div>
-
-              <div className="space-y-6 relative z-10">
-                <div className="grid grid-cols-1 gap-6">
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Signatory</label>
-                    <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Signatory Designation</label>
-                    <input type="text" name="signatoryTitle" value={formData.signatoryTitle} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-5 pt-4 border-t border-[#F8F9FA]">
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Evaluated By (Initials)</label>
-                    <input type="text" name="reviewerInitials" value={formData.reviewerInitials} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Reviewer Role</label>
-                    <input type="text" name="reviewerDesignation" value={formData.reviewerDesignation} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
                   </div>
                 </div>
               </div>
-            </div>
+
+              <div className="h-px bg-slate-100 mx-4"></div>
+
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-6 bg-[#D4AF37] rounded-full"></div>
+                    <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Issuance Metadata</h3>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#1E5631]"></span>
+                    <span className="text-[10px] text-[#2B2B2B]/60 font-bold tracking-widest uppercase italic">Header Records</span>
+                  </div>
+                </div>
+
+                {(docType !== 'LETTER') && (
+                  <div className="grid grid-cols-2 gap-5 bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] transition-all overflow-hidden relative">
+                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">
+                        {docType === 'AO' ? 'AO Number' : docType === 'SO' ? 'SO Number' : 'Memo Number'}
+                      </label>
+                      <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all placeholder:text-[#2B2B2B]/40" placeholder="00-00-00" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Series</label>
+                      <input type="number" name="seriesYear" value={formData.seriesYear} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all shadow-sm" />
+                    </div>
+                  </div>
+                )}
+
+                {docType === 'MEMO' && (
+                  <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Internal Date Stamp</label>
+                      <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all" />
+                    </div>
+                    <div className="grid grid-cols-3 gap-5">
+                      <div className="col-span-1">
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Type</label>
+                        <select name="memoAddresseeType" value={formData.memoAddresseeType} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] cursor-pointer appearance-none">
+                          <option value="FOR">FOR</option>
+                          <option value="TO">TO</option>
+                          <option value="THROUGH">THROUGH</option>
+                          <option value="ATTENTION">ATTENTION</option>
+                        </select>
+                      </div>
+                      <div className="col-span-2">
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Name</label>
+                        <input type="text" name="memoToName" value={formData.memoToName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Recipient Title / Position</label>
+                      <input type="text" name="memoToTitle" value={formData.memoToTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="E.g., Division Chief" />
+                    </div>
+                  </div>
+                )}
+
+                {(docType === 'AO' || docType === 'SO' || docType === 'MEMO') && (
+                  <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Subject Line</label>
+                    <textarea name="subject" value={formData.subject} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-6 py-5 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all min-h-[140px] resize-none leading-relaxed" placeholder="ENTER SUBJECT MATTER IN DETAIL..." rows="4" />
+                  </div>
+                )}
+
+                {docType === 'LETTER' && (
+                  <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                    <div className="grid grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Date</label>
+                        <input type="text" name="dateLine" value={formData.dateLine} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Month DD, YYYY" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Salutation</label>
+                        <input type="text" name="salutation" value={formData.salutation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Dear Mayor [Last Name]:" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Addressee Name</label>
+                        <input type="text" name="addresseeName" value={formData.addresseeName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="HON. [NAME]" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Designation</label>
+                        <input type="text" name="addresseeTitle" value={formData.addresseeTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="Governor/Congressman/Mayor" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Office / LGU</label>
+                        <input type="text" name="addresseeOffice" value={formData.addresseeOffice} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Local Government Unit of [City]" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Province / Region</label>
+                        <input type="text" name="addresseeLocation" value={formData.addresseeLocation} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Province, MIMAROPA Region" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Name (Optional)</label>
+                        <input type="text" name="thruName" value={formData.thruName} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF]" placeholder="Leave blank if none" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Thru: Title (Optional)</label>
+                        <input type="text" name="thruTitle" value={formData.thruTitle} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none capitalize bg-[#FFFFFF]" placeholder="e.g., Municipal Agriculturist" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-5 border-t border-[#F8F9FA] pt-6">
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Complimentary Close</label>
+                        <input type="text" name="complimentaryClose" value={formData.complimentaryClose} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="Sincerely yours," />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Enclosures (Optional)</label>
+                        <input type="text" name="enclosures" value={formData.enclosures} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF]" placeholder="List enclosures if any" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <hr className="border-gray-200" />
+
+              {/* Editor Workspace Panel */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
+                    <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Editor Workspace</h3>
+                  </div>
+                  <div className="flex gap-3">
+                    <input type="file" accept=".docx" ref={fileInputRef} className="hidden" onChange={handleWordUpload} />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current.click()}
+                      disabled={isImportingWord}
+                      className="flex items-center gap-2.5 bg-[#FFFFFF] border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#b49020] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all disabled:opacity-50 active:scale-95 group/word"
+                    >
+                      {isImportingWord ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} className="group-hover/word:-translate-y-0.5 transition-transform" />}
+                      {isImportingWord ? 'IMPORTING...' : 'IMPORT WORD'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleAIGrammarCheck}
+                      disabled={isCheckingGrammar}
+                      className="flex items-center gap-2.5 bg-[#1E5631] border border-[#1E5631] text-[#FFFFFF] hover:bg-[#153a21] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest shadow-lg shadow-[#1E5631]/20 transition-all disabled:opacity-50 active:scale-95 group/ai"
+                    >
+                      {isCheckingGrammar ? <Loader2 size={14} className="animate-spin" /> : <Wand2 size={14} className="group-hover/ai:rotate-12 transition-transform shadow-sm" />}
+                      {isCheckingGrammar ? 'OPTIMIZING...' : 'AI GRAMMAR'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* --- SMART SNIPPET BAR --- */}
+                <div className="bg-slate-900/5 p-4 rounded-2xl border border-[#F8F9FA]/60 flex flex-wrap gap-2">
+                  <div className="w-full mb-1 flex items-center gap-2 px-1">
+                    <Zap size={10} className="text-[#D4AF37] fill-[#D4AF37]" />
+                    <span className="text-[9px] font-black text-[#2B2B2B]/60 uppercase tracking-widest">Rapid Insertion Snippets</span>
+                  </div>
+                  {SNIPPETS[docType]?.map((snip, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => insertSnippet(snip)}
+                      className="bg-[#FFFFFF] border border-[#F8F9FA] hover:border-[#1E5631] hover:text-[#1E5631] px-3 py-1.5 rounded-lg text-[10px] font-bold text-[#2B2B2B]/60 transition-all active:scale-95 shadow-sm"
+                    >
+                      {snip.length > 25 ? snip.substring(0, 25) + "..." : snip}
+                    </button>
+                  ))}
+                </div>
+
+                {/* PAGE EDITORS */}
+                <div className="space-y-6">
+                  {formData.contentSections.map((content, index) => (
+                    <div key={index} className="bg-[#FFFFFF] rounded-[2.5rem] border border-[#F8F9FA] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.04)] focus-within:ring-8 focus-within:ring-[#1E5631]/10 focus-within:border-[#1E5631] transition-all">
+                      <div className="bg-[#F8F9FA]/80 px-8 py-4 border-b border-[#F8F9FA] flex justify-between items-center">
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-lg bg-[#1E5631] text-[#FFFFFF] flex items-center justify-center text-xs font-black shadow-lg shadow-[#1E5631]/20">{index + 1}</span>
+                          <span className="text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.2em]">Document Page {index + 1}</span>
+                        </div>
+                        {formData.contentSections.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removePage(index)}
+                            className="flex items-center gap-2 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-widest transition-all"
+                          >
+                            <Trash2 size={12} /> Remove
+                          </button>
+                        )}
+                      </div>
+                      {/* Apply WYSIWYG Editor Styles matching the formatting rules natively inside TinyMCE */}
+                      {/* ReactQuill Editor */}
+                      <div className="da-quill-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all bg-white">
+                        <ReactQuill
+                          theme="snow"
+                          value={content || ''}
+                          onChange={(newContent) => handleEditorChange(index, newContent)}
+                          placeholder={`Start typing page ${index + 1} content here...`}
+                          modules={{
+                            toolbar: [
+                              [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }, { 'header': [1, 2, 3, 4, 5, 6, false] }],
+                              ['bold', 'italic', 'underline', 'strike'],
+                              [{ 'color': [] }, { 'background': [] }],
+                              [{ 'script': 'sub' }, { 'script': 'super' }],
+                              [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                              [{ 'direction': 'rtl' }, { 'align': [] }],
+                              ['link', 'blockquote', 'code-block'],
+                              ['clean']
+                            ],
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+
+                </div>
+              </div>
+
+              <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)] relative overflow-hidden group/sig">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/10 blur-[60px] rounded-full group-hover/sig:bg-[#1E5631]/10 transition-all"></div>
+
+                <div className="flex items-center gap-3 mb-8 relative z-10">
+                  <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
+                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Authorization & Review</h3>
+                </div>
+
+                <div className="space-y-6 relative z-10">
+                  <div className="grid grid-cols-1 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Signatory</label>
+                      <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Signatory Designation</label>
+                      <input type="text" name="signatoryTitle" value={formData.signatoryTitle} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-5 pt-4 border-t border-[#F8F9FA]">
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Evaluated By (Initials)</label>
+                      <input type="text" name="reviewerInitials" value={formData.reviewerInitials} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Reviewer Role</label>
+                      <input type="text" name="reviewerDesignation" value={formData.reviewerDesignation} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div className="pb-10"></div> {/* Spacer for scrolling */}
             </div>
@@ -888,8 +888,8 @@ const CreateDocument = () => {
                 if (!isPreviewMode) resetZoom(); // Reset zoom to match new space nicely
               }}
               type="button"
-              className={`group flex-1 border-2 font-black py-4.5 rounded-[1.5rem] shadow-sm flex justify-center items-center gap-3 text-[11px] tracking-[0.2em] uppercase transition-all active:scale-95 ${isPreviewMode 
-                ? 'bg-[#1E5631]/10 border-[#1E5631]/20 text-[#1E5631]' 
+              className={`group flex-1 border-2 font-black py-4.5 rounded-[1.5rem] shadow-sm flex justify-center items-center gap-3 text-[11px] tracking-[0.2em] uppercase transition-all active:scale-95 ${isPreviewMode
+                ? 'bg-[#1E5631]/10 border-[#1E5631]/20 text-[#1E5631]'
                 : 'bg-[#FFFFFF] border-[#F8F9FA] hover:border-[#D4AF37] hover:text-[#D4AF37] text-[#2B2B2B]/60'}`}
             >
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isPreviewMode ? 'bg-[#1E5631]/20' : 'bg-[#F8F9FA] group-hover:bg-[#D4AF37]/10'}`}>

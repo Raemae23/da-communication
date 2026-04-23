@@ -98,42 +98,42 @@ const Login = () => {
       </div>
 
       {/* Main Glassmorphism Card */}
-      <div className="relative z-20 w-full max-w-[1280px] flex flex-col lg:flex-row rounded-[2.5rem] lg:rounded-[3.5rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] m-4 sm:m-8 lg:m-12 border border-white/20">
+      <div className="relative z-20 w-full max-w-[960px] max-h-[640px] min-h-[540px] flex flex-col lg:flex-row rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] mx-4 border border-white/20">
 
         {/* Left Side: Modern Glass Branding */}
-        <div className="p-12 lg:p-24 flex-[1.2] flex flex-col items-center justify-center text-center relative bg-white/10 backdrop-blur-2xl border-b lg:border-b-0 lg:border-r border-white/20">
+        <div className="p-10 lg:p-14 flex-[1.1] flex flex-col items-center justify-center text-center relative bg-white/10 backdrop-blur-2xl border-b lg:border-b-0 lg:border-r border-white/20">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/5 to-transparent z-0 pointer-events-none"></div>
 
           {/* Logo Showcase */}
-          <div className="relative z-10 w-48 h-48 lg:w-64 lg:h-64 bg-white/10 backdrop-blur-xl rounded-full p-4 mx-auto mb-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 transform hover:-translate-y-2 transition-transform duration-500 flex items-center justify-center overflow-hidden">
-            <div className="w-full h-full bg-[#FFFFFF] rounded-full flex items-center justify-center p-3 shadow-inner">
+          <div className="relative z-10 w-32 h-32 lg:w-40 lg:h-40 bg-white/10 backdrop-blur-xl rounded-full p-3 mx-auto mb-6 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 transform hover:-translate-y-2 transition-transform duration-500 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full bg-[#FFFFFF] rounded-full flex items-center justify-center p-2 shadow-inner">
               <img src={daLogo} alt="DA Logo" className="w-[90%] h-[90%] object-contain drop-shadow-md" />
             </div>
           </div>
 
-          <h1 className="relative z-10 text-5xl lg:text-7xl font-black text-white mb-3 tracking-tighter leading-tight drop-shadow-2xl">
+          <h1 className="relative z-10 text-3xl lg:text-4xl font-black text-white mb-2 tracking-tighter leading-tight drop-shadow-2xl">
             Department of <br /><span className="text-[#D4AF37] drop-shadow-[0_0_20px_rgba(212,175,55,0.4)]">Agriculture</span>
           </h1>
-          <div className="relative z-10 h-1.5 w-24 bg-gradient-to-r from-white/10 via-[#D4AF37] to-white/10 mx-auto mb-10 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)]"></div>
+          <div className="relative z-10 h-1.5 w-20 bg-gradient-to-r from-white/10 via-[#D4AF37] to-white/10 mx-auto mb-5 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.6)]"></div>
 
-          <div className="relative z-10 space-y-1 bg-black/10 px-10 py-5 rounded-3xl backdrop-blur-sm border border-white/10 shadow-xl">
-            <p className="text-white text-xl lg:text-2xl font-light tracking-wide italic">Agribusiness and Marketing Assistance Division</p>
-            <p className="text-[#D4AF37] uppercase tracking-[0.4em] text-[10px] lg:text-[11px] font-black">Communication System</p>
+          <div className="relative z-10 space-y-1 bg-black/10 px-6 py-3 rounded-3xl backdrop-blur-sm border border-white/10 shadow-xl">
+            <p className="text-white text-sm lg:text-base font-light tracking-wide italic">Agribusiness and Marketing Assistance Division</p>
+            <p className="text-[#D4AF37] uppercase tracking-[0.4em] text-[9px] lg:text-[10px] font-black">Communication System</p>
           </div>
         </div>
 
         {/* Right Side: Ultra Clean Premium Form */}
-        <div className="flex-1 p-12 lg:p-24 bg-[#FFFFFF] flex flex-col justify-center relative">
+        <div className="flex-1 p-8 lg:p-12 bg-[#FFFFFF] flex flex-col justify-center relative overflow-y-auto">
           <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#1E5631]/5 rounded-full blur-[100px] -mr-64 -mt-64 pointer-events-none"></div>
 
-          <div className="mb-14 relative z-10">
-            <h2 className="text-4xl lg:text-5xl font-black text-[#2B2B2B] tracking-tighter mb-3">Welcome</h2>
+          <div className="mb-7 relative z-10">
+            <h2 className="text-3xl lg:text-4xl font-black text-[#2B2B2B] tracking-tighter mb-1">Welcome</h2>
             <p className="text-xs font-bold text-[#2B2B2B]/40 uppercase tracking-[0.3em]">
               {isRegistering ? 'Create a new staff account' : 'Verify your credentials to continue'}
             </p>
           </div>
 
-          <form className="space-y-7 relative z-10" onSubmit={handleSubmit}>
+          <form className="space-y-4 relative z-10" onSubmit={handleSubmit}>
             {error && (
               <div className="bg-red-50 border border-red-100 text-red-700 text-[11px] font-black uppercase tracking-widest p-5 rounded-2xl flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-300 shadow-sm">
                 <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]"></div>
@@ -141,7 +141,7 @@ const Login = () => {
               </div>
             )}
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="group">
                 <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.3em] mb-4 ml-2 transition-colors group-focus-within:text-[#1E5631]">
                   Email
@@ -191,7 +191,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full relative flex justify-center items-center gap-3 py-6 mt-6 bg-gradient-to-r from-[#1E5631] to-[#153a21] hover:from-[#153a21] hover:to-[#0d2a17] text-[#FFFFFF] text-[13px] font-black rounded-[1.5rem] shadow-[0_15px_30px_rgba(30,86,49,0.3)] hover:shadow-[0_20px_40px_rgba(30,86,49,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-70 group overflow-hidden"
+              className="w-full relative flex justify-center items-center gap-3 py-4 mt-3 bg-gradient-to-r from-[#1E5631] to-[#153a21] hover:from-[#153a21] hover:to-[#0d2a17] text-[#FFFFFF] text-[13px] font-black rounded-[1.5rem] shadow-[0_15px_30px_rgba(30,86,49,0.3)] hover:shadow-[0_20px_40px_rgba(30,86,49,0.4)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-70 group overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"></div>
               {loading ? (
@@ -204,7 +204,7 @@ const Login = () => {
               </span>
             </button>
 
-            <div className="text-center mt-10 text-[10px] font-black text-[#2B2B2B]/40 uppercase tracking-[0.25em]">
+            <div className="text-center mt-5 text-[10px] font-black text-[#2B2B2B]/40 uppercase tracking-[0.25em]">
               {isRegistering ? (
                 <>
                   Already registered?{' '}
