@@ -5,23 +5,16 @@
   width: 6px;
   height: 6px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  /* slate-300 */
   border-radius: 10px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
-  /* slate-400 */
 }
-
-/* For Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
@@ -31,7 +24,6 @@
    SINGLE-PAGE PREVIEW with scrollable body
    ============================================================ */
 
-/* The paper frame — fixed to one page size on screen */
 .da-single-page {
   width: var(--page-width, 8.27in);
   height: var(--page-height, 11.69in);
@@ -44,193 +36,64 @@
   position: relative;
 }
 
-/* Header image — never scrolls away */
-.da-page-header {
+.da-page-header, .da-page-footer {
   flex-shrink: 0;
   width: 100%;
   line-height: 0;
+  z-index: 20;
 }
 
-/* Content area — grows to fill space, scrolls vertically */
 .da-page-body {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0.5in 1in 0.5in 1.25in;   /* standard DA margins */
+  padding: 0.5in 1in 0.5in 1.25in;   /* Screen Margins */
   font-family: 'Cambria', serif;
   font-size: 11pt;
   color: black;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
 }
 
 .da-page-body::-webkit-scrollbar { width: 5px; }
 .da-page-body::-webkit-scrollbar-track { background: transparent; }
 .da-page-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
-/* Footer image — never scrolls away */
-.da-page-footer {
-  flex-shrink: 0;
-  width: 100%;
-  line-height: 0;
-}
+/* ============================================================
+   DOCUMENT BODY & TYPOGRAPHY
+   ============================================================ */
 
 .da-document-body {
-  text-align: justify;
-  line-height: 1.15;
-  /* Prevent single lines at the bottom/top of a page */
-  orphans: 3;
-  widows: 3;
-
-  /* Natural word wrapping */
-  word-wrap: break-word;
-  overflow-wrap: break-word;
   word-break: break-word;
   white-space: normal;
-}
-
-/* Professional Snippet Bar with Glassmorphism */
-.snippet-bar {
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
-  padding: 12px 16px;
-  background: rgba(248, 250, 252, 0.8);
-  /* slate-50/80 */
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-  /* slate-200/80 */
-  z-index: 10;
-}
-
-.snippet-btn {
-  background: white;
-  border: 1px solid #e2e8f0;
-  /* slate-200 */
-  color: #475569;
-  /* slate-600 */
-  padding: 8px 16px;
-  border-radius: 14px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.025em;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none;
-}
-
-.snippet-btn:hover {
-  background: #f1f5f9;
-  /* slate-100 */
-  border-color: #cbd5e1;
-  /* slate-300 */
-  color: #166534;
-  /* green-800 */
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.snippet-btn:active {
-  transform: scale(0.98);
-}
-
-.da-quill-editor .ql-editor {
-  font-family: 'Cambria', serif;
-  font-size: 11pt;
   line-height: 1.15;
-  padding: 1.5rem;
+  text-align: justify;
+  orphans: 3;
+  widows: 3;
 }
 
-.da-document-body p,
-.da-document-body ul,
-.da-document-body ol {
+.da-document-body p {
+  margin-top: 0;
   margin-bottom: 1.15em;
-  /* Match the line height for single blank line spacing */
 }
 
-.da-document-body ul,
-.da-document-body ol {
-  padding-left: 1.5rem;
+.da-document-body ul, .da-document-body ol {
+  padding-left: 2rem;
+  margin-bottom: 1.15em;
 }
 
 .da-document-body li {
   margin-bottom: 0.5em;
 }
 
-/* --- QUILL CUSTOM FONTS & SIZES --- */
-.ql-font-cambria {
-  font-family: 'Cambria', serif !important;
-}
-
-.ql-font-arial {
-  font-family: 'Arial', sans-serif !important;
-}
-
-.ql-font-times-new-roman {
-  font-family: 'Times New Roman', serif !important;
-}
-
-.ql-size-10pt {
-  font-size: 10pt !important;
-}
-
-.ql-size-11pt {
-  font-size: 11pt !important;
-}
-
-.ql-size-12pt {
-  font-size: 12pt !important;
-}
-
-/* Higher priority font application */
-.ql-editor span.ql-font-cambria {
-  font-family: 'Cambria', serif !important;
-}
-
-.ql-editor span.ql-font-arial {
-  font-family: 'Arial', sans-serif !important;
-}
-
-.ql-editor span.ql-font-times-new-roman {
-  font-family: 'Times New Roman', serif !important;
-}
-
-/* Higher priority size application */
-.ql-editor span.ql-size-10pt {
-  font-size: 10pt !important;
-}
-
-.ql-editor span.ql-size-11pt {
-  font-size: 11pt !important;
-}
-
-.ql-editor span.ql-size-12pt {
-  font-size: 12pt !important;
-}
-
-/* --- PROFESSIONAL TABLE STYLING --- */
-.ql-editor table {
-  border-collapse: collapse;
+.da-document-body table {
   width: 100%;
-  margin-bottom: 1rem;
+  border-collapse: collapse;
+  margin-bottom: 1.15em;
 }
 
-.ql-editor table td {
-  border: 1px solid #1e293b;
-  /* slate-800 for clarity in print */
-  padding: 8px 12px;
+.da-document-body td, .da-document-body th {
+  border: 1px solid black;
+  padding: 8px;
   vertical-align: top;
-}
-
-.ql-editor table tr:first-child td {
-  background-color: #f8fafc;
-  /* slate-50 */
-  font-weight: bold;
 }
 
 .review-initials {
@@ -239,10 +102,25 @@
 }
 
 /* ============================================================
-   PRINT — header/footer repeat on every physical page
+   PRINT PAGINATION (TABLE-BASED)
    ============================================================ */
-@media print {
 
+.da-print-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+}
+
+.da-print-table td {
+  border: none;
+  padding: 0;
+}
+
+.da-header-spacer, .da-footer-spacer {
+  display: none; 
+}
+
+@media print {
   html, body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -253,7 +131,6 @@
 
   .no-print { display: none !important; }
 
-  /* Let the single-page wrapper expand freely for print */
   .da-single-page {
     width: var(--page-width, 8.27in) !important;
     height: auto !important;
@@ -262,7 +139,6 @@
     display: block !important;
   }
 
-  /* Header fixed at top — repeats on every page */
   .da-page-header {
     position: fixed;
     top: 0;
@@ -271,7 +147,6 @@
     z-index: 9999;
   }
 
-  /* Footer fixed at bottom — repeats on every page */
   .da-page-footer {
     position: fixed;
     bottom: 0;
@@ -280,16 +155,20 @@
     z-index: 9999;
   }
 
-  /* Body: add top/bottom margins to avoid overlap with fixed header/footer.
-     Refined to match screen: Header (~1.2in) + padding (0.5in) = 1.7in */
   .da-page-body {
     overflow: visible !important;
-    padding-top: 1.7in;
-    padding-bottom: 1.2in;
-    padding-left: 1.25in;
-    padding-right: 1in;
-    margin: 0;
+    padding: 0 1in 0 1.25in !important; /* side margins only */
+    margin: 0 !important;
     display: block !important;
+  }
+
+  .da-header-spacer {
+    display: block;
+    height: 1.7in; 
+  }
+  .da-footer-spacer {
+    display: block;
+    height: 1.3in; 
   }
 
   @page {
@@ -298,8 +177,8 @@
       content: counter(page) " of " counter(pages);
       font-family: 'Cambria', serif;
       font-size: 10pt;
-      padding-right: 1in;
-      padding-bottom: 0.5in;
+      padding-right: 1.15in;
+      padding-bottom: 0.65in;
     }
   }
 

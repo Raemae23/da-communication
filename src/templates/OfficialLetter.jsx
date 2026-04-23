@@ -31,63 +31,77 @@ const OfficialLetter = forwardRef(({ data }, ref) => {
 
       {/* ── SCROLLABLE BODY ── */}
       <div className="da-page-body">
-        {/* Date */}
-        <div className="text-left mb-[2.3em] font-normal leading-[1]">
-          {data.dateLine || 'Month DD, YYYY'}
-        </div>
+        <table className="da-print-table">
+          <thead>
+            <tr><td><div className="da-header-spacer" /></td></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {/* Date */}
+                <div className="text-left mb-[2.3em] font-normal leading-[1]">
+                  {data.dateLine || 'Month DD, YYYY'}
+                </div>
 
-        {/* Addressee */}
-        <div className="text-left mb-[2.3em] leading-[1]">
-          <div className="font-bold uppercase">{data.addresseeName || 'HON. (NAME OF MAYOR)'}</div>
-          <div className="capitalize mt-[2pt]">{data.addresseeTitle || 'Governor/Congressman/Mayor'}</div>
-          <div className="mt-[2pt]">{data.addresseeOffice || 'Local Government Unit of [Municipality/City]'}</div>
-          <div className="mt-[2pt]">{data.addresseeLocation || '[Province, MIMAROPA Region]'}</div>
-        </div>
+                {/* Addressee */}
+                <div className="text-left mb-[2.3em] leading-[1]">
+                  <div className="font-bold uppercase">{data.addresseeName || 'HON. (NAME OF MAYOR)'}</div>
+                  <div className="capitalize mt-[2pt]">{data.addresseeTitle || 'Governor/Congressman/Mayor'}</div>
+                  <div className="mt-[2pt]">{data.addresseeOffice || 'Local Government Unit of [Municipality/City]'}</div>
+                  <div className="mt-[2pt]">{data.addresseeLocation || '[Province, MIMAROPA Region]'}</div>
+                </div>
 
-        {/* Thru (optional) */}
-        {data.thruName && (
-          <div className="flex mb-[2.3em] text-left leading-[1]">
-            <div className="w-16 font-normal">Thru:</div>
-            <div>
-              <div className="font-bold uppercase">{data.thruName}</div>
-              <div className="capitalize mt-[2pt]">{data.thruTitle || 'Municipal Agriculturist'}</div>
-            </div>
-          </div>
-        )}
+                {/* Thru (optional) */}
+                {data.thruName && (
+                  <div className="flex mb-[2.3em] text-left leading-[1]">
+                    <div className="w-16 font-normal">Thru:</div>
+                    <div>
+                      <div className="font-bold uppercase">{data.thruName}</div>
+                      <div className="capitalize mt-[2pt]">{data.thruTitle || 'Municipal Agriculturist'}</div>
+                    </div>
+                  </div>
+                )}
 
-        {/* Salutation */}
-        <div className="font-bold mb-[1.15em] text-left leading-[1]">
-          {data.salutation || 'Dear Mayor [Last Name]:'}
-        </div>
+                {/* Salutation */}
+                <div className="font-bold mb-[1.15em] text-left leading-[1]">
+                  {data.salutation || 'Dear Mayor [Last Name]:'}
+                </div>
 
-        {/* Body */}
-        <div
-          className="da-document-body text-justify leading-[1.15] [&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-8 [&_ol]:list-decimal [&_ol]:pl-8 [&_li]:mb-0 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-black [&_td]:p-2 [&_th]:border [&_th]:border-black [&_th]:p-2"
-          dangerouslySetInnerHTML={{ __html: fullBody }}
-        />
+                {/* Body */}
+                <div
+                  className="da-document-body"
+                  dangerouslySetInnerHTML={{ __html: fullBody }}
+                />
 
-        {/* Complimentary close */}
-        <div className="mt-[2.3em] text-left leading-[1]">
-          {data.complimentaryClose || 'Sincerely yours,'}
-        </div>
+                {/* Complimentary close */}
+                <div className="mt-[2.3em] text-left leading-[1]">
+                  {data.complimentaryClose || 'Sincerely yours,'}
+                </div>
 
-        {/* Signatory */}
-        <div className="mt-[3.45em] text-left leading-[1] page-break-inside-avoid">
-          <div className="font-bold uppercase">{data.signatoryName || 'ATTY. CHRISTOPHER R. BAÑAS'}</div>
-          <div className="font-normal capitalize">{data.signatoryTitle || 'Regional Executive Director'}</div>
-          {data.signatoryOffice && <div className="font-normal capitalize">{data.signatoryOffice}</div>}
-        </div>
+                {/* Signatory */}
+                <div className="mt-[3.45em] text-left leading-[1] page-break-inside-avoid">
+                  <div className="font-bold uppercase">{data.signatoryName || 'ATTY. CHRISTOPHER R. BAÑAS'}</div>
+                  <div className="font-normal capitalize">{data.signatoryTitle || 'Regional Executive Director'}</div>
+                  {data.signatoryOffice && <div className="font-normal capitalize">{data.signatoryOffice}</div>}
+                </div>
 
-        {data.enclosures && (
-          <div className="mt-[2.3em] text-left page-break-inside-avoid leading-[1]">
-            Encl.: {data.enclosures}
-          </div>
-        )}
+                {data.enclosures && (
+                  <div className="mt-[2.3em] text-left page-break-inside-avoid leading-[1]">
+                    Encl.: {data.enclosures}
+                  </div>
+                )}
 
-        <div className="review-initials mt-[2.3em] text-left page-break-inside-avoid text-[8pt] leading-[1]">
-          <div className="tracking-wide uppercase">{data.reviewerInitials || 'J.D. CRUZ'}</div>
-          <div className="font-normal">{data.reviewerDesignation || 'Division Chief'}</div>
-        </div>
+                <div className="review-initials mt-[2.3em] text-left page-break-inside-avoid text-[8pt] leading-[1]">
+                  <div className="tracking-wide uppercase">{data.reviewerInitials || 'J.D. CRUZ'}</div>
+                  <div className="font-normal">{data.reviewerDesignation || 'Division Chief'}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td><div className="da-footer-spacer" /></td></tr>
+          </tfoot>
+        </table>
       </div>
 
       {/* ── FOOTER ── */}

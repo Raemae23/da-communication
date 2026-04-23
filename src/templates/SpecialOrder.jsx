@@ -31,35 +31,49 @@ const SpecialOrder = forwardRef(({ data }, ref) => {
 
       {/* ── SCROLLABLE BODY ── */}
       <div className="da-page-body">
-        <div className="font-bold uppercase text-left mb-0">SPECIAL ORDER</div>
-        <div className="text-left mb-[2.3em] font-bold leading-[1]">
-          <div>No. {data.documentNumber || '___'}</div>
-          <div>Series of {data.seriesYear || new Date().getFullYear()}</div>
-        </div>
+        <table className="da-print-table">
+          <thead>
+            <tr><td><div className="da-header-spacer" /></td></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div className="font-bold uppercase text-left mb-0">SPECIAL ORDER</div>
+                <div className="text-left mb-[2.3em] font-bold leading-[1]">
+                  <div>No. {data.documentNumber || '___'}</div>
+                  <div>Series of {data.seriesYear || new Date().getFullYear()}</div>
+                </div>
 
-        <div className="flex text-left items-start mb-[1.15em]">
-          <div className="font-bold uppercase whitespace-nowrap tracking-wide">SUBJECT</div>
-          <div className="font-bold ml-1">:</div>
-          <div className="flex-1 uppercase font-bold ml-2">{data.subject || 'NO SUBJECT PROVIDED'}</div>
-        </div>
-        <hr className="border-t border-black my-[1.15em]" />
+                <div className="flex text-left items-start mb-[1.15em]">
+                  <div className="font-bold uppercase whitespace-nowrap tracking-wide">SUBJECT</div>
+                  <div className="font-bold ml-1">:</div>
+                  <div className="flex-1 uppercase font-bold ml-2">{data.subject || 'NO SUBJECT PROVIDED'}</div>
+                </div>
+                <hr className="border-t border-black my-[1.15em]" />
 
-        <div
-          className="da-document-body text-justify leading-[1.15] [&_p]:mb-0 [&_ul]:list-disc [&_ul]:pl-8 [&_ol]:list-decimal [&_ol]:pl-8 [&_li]:mb-0 [&_table]:w-full [&_table]:border-collapse [&_td]:border [&_td]:border-black [&_td]:p-2 [&_th]:border [&_th]:border-black [&_th]:p-2"
-          dangerouslySetInnerHTML={{ __html: fullBody }}
-        />
+                <div
+                  className="da-document-body"
+                  dangerouslySetInnerHTML={{ __html: fullBody }}
+                />
 
-        <div className="mt-[3.45em] text-left leading-[1] page-break-inside-avoid">
-          <div className="h-[3em]" />
-          <div className="font-bold uppercase">{data.signatoryName || 'ATTY. CHRISTOPHER R. BAÑAS'}</div>
-          <div className="font-bold capitalize">{data.signatoryTitle || 'Regional Executive Director'}</div>
-          {data.signatoryOffice && <div className="font-bold capitalize">{data.signatoryOffice}</div>}
-        </div>
+                <div className="mt-[3.45em] text-left leading-[1] page-break-inside-avoid">
+                  <div className="h-[3em]" />
+                  <div className="font-bold uppercase">{data.signatoryName || 'ATTY. CHRISTOPHER R. BAÑAS'}</div>
+                  <div className="font-bold capitalize">{data.signatoryTitle || 'Regional Executive Director'}</div>
+                  {data.signatoryOffice && <div className="font-bold capitalize">{data.signatoryOffice}</div>}
+                </div>
 
-        <div className="mt-[2.3em] text-left page-break-inside-avoid text-[8pt] leading-[1]">
-          <div className="tracking-wide uppercase">{data.reviewerInitials || 'J.D. CRUZ'}</div>
-          <div className="font-normal">{data.reviewerDesignation || 'Division Chief'}</div>
-        </div>
+                <div className="mt-[2.3em] text-left page-break-inside-avoid text-[8pt] leading-[1]">
+                  <div className="tracking-wide uppercase">{data.reviewerInitials || 'J.D. CRUZ'}</div>
+                  <div className="font-normal">{data.reviewerDesignation || 'Division Chief'}</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td><div className="da-footer-spacer" /></td></tr>
+          </tfoot>
+        </table>
       </div>
 
       {/* ── FOOTER ── */}
