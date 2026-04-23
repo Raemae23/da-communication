@@ -1,8 +1,8 @@
 // src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, LogIn, Loader2, Eye, EyeOff, UserPlus, ShieldAlert } from 'lucide-react';
-import { loginUser, registerUser } from '../services/firebase/auth';
+import { Mail, Lock, LogIn, Loader2, Eye, EyeOff, UserPlus, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
+import { loginUser, registerUser, logoutUser } from '../services/firebase/auth';
 
 // --- NEW: Import your DA Logo ---
 import daLogo from '../assets/images/da-logo.png';
@@ -13,9 +13,17 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [toastMessage, setToastMessage] = useState({ show: false, message: '', type: 'success' });
   const [loading, setLoading] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false); // --- NEW: Toggle State ---
   const navigate = useNavigate();
+
+  const showToast = (message, type = 'success') => {
+    setToastMessage({ show: true, message, type });
+    setTimeout(() => {
+      setToastMessage(prev => ({ ...prev, show: false }));
+    }, 4000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,18 +31,27 @@ const Login = () => {
     setLoading(true);
 
     try {
-      let result;
       if (isRegistering) {
-        result = await registerUser(email, password);
+        const result = await registerUser(email, password);
+        if (result.success) {
+          // Immediately log them out so they must re-enter credentials
+          await logoutUser();
+          showToast('Account successfully saved! Please sign in with your new credentials.', 'success');
+          setIsRegistering(false);
+          setPassword('');
+          setLoading(false);
+        } else {
+          setError(result.error);
+          setLoading(false);
+        }
       } else {
-        result = await loginUser(email, password);
-      }
-
-      if (result.success) {
-        navigate('/dashboard');
-      } else {
-        setError(result.error);
-        setLoading(false);
+        const result = await loginUser(email, password);
+        if (result.success) {
+          navigate('/dashboard');
+        } else {
+          setError(result.error);
+          setLoading(false);
+        }
       }
     } catch (err) {
       setError(`Failed to ${isRegistering ? 'register' : 'log in'}. Please check your connection.`);
@@ -44,6 +61,32 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center font-sans overflow-hidden relative bg-slate-900">
+
+      {/* --- TOAST NOTIFICATION --- */}
+      {toastMessage.show && (
+        <div className={`fixed top-8 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-top-6 duration-300 min-w-[300px] border ${toastMessage.type === 'success'
+          ? 'bg-emerald-50/95 backdrop-blur-md border-emerald-200 text-emerald-800 shadow-emerald-900/20'
+          : 'bg-red-50/95 backdrop-blur-md border-red-200 text-red-800 shadow-red-900/20'
+          }`}>
+          {toastMessage.type === 'success'
+            ? <CheckCircle size={28} className="text-emerald-600" />
+            : <ShieldAlert size={28} className="text-red-600" />
+          }
+          <div className="flex flex-col">
+            <span className="font-black text-[10px] uppercase tracking-widest opacity-70">
+              {toastMessage.type === 'success' ? 'Success' : 'Attention'}
+            </span>
+            <span className="font-bold text-sm tracking-tight">{toastMessage.message}</span>
+          </div>
+          <button
+            onClick={() => setToastMessage(prev => ({ ...prev, show: false }))}
+            className="ml-auto p-1.5 hover:bg-black/5 rounded-full transition-colors"
+          >
+            <XCircle size={18} className="opacity-50 hover:opacity-100" />
+          </button>
+        </div>
+      )}
+
       {/* Dynamic Ambient Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[#1E5631]/80 backdrop-blur-[2px] mix-blend-multiply z-10 transition-all"></div>
@@ -101,7 +144,7 @@ const Login = () => {
             <div className="space-y-6">
               <div className="group">
                 <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.3em] mb-4 ml-2 transition-colors group-focus-within:text-[#1E5631]">
-                  Official Email
+                  Email
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
@@ -120,7 +163,7 @@ const Login = () => {
 
               <div className="group">
                 <label className="block text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.3em] mb-4 ml-2 transition-colors group-focus-within:text-[#1E5631]">
-                  Security Protocol
+                  Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
