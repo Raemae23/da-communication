@@ -174,38 +174,6 @@ const Settings_Page = () => {
           {currentUser?.email}
         </div>
 
-        {/* ── PROFILE ──────────────────────────────────────────────────────── */}
-        <SettingsSection icon={User} title="Profile" description="Update your display name">
-          <SettingsField label="Email Address">
-            <input type="email" className={inputClass + ' opacity-60 cursor-not-allowed'} value={currentUser?.email || ''} readOnly />
-          </SettingsField>
-          <SettingsField label="Display Name">
-            <input
-              type="text"
-              className={inputClass}
-              placeholder="Enter your display name"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
-          </SettingsField>
-          <SettingsField label="Role">
-            <div className="px-5 py-3.5 bg-[#F8F9FA] border-2 border-slate-200 rounded-2xl text-sm font-black text-[#2B2B2B]/60 uppercase tracking-widest opacity-60">
-              {isAdmin ? 'Administrator' : 'Staff Encoder'}
-            </div>
-          </SettingsField>
-          <FeedbackBanner msg={profileMsg} />
-          <div className="flex justify-end">
-            <button
-              onClick={handleProfileSave}
-              disabled={profileSaving}
-              className="px-8 py-3.5 bg-[#1E5631] hover:bg-[#153a21] text-[#FFFFFF] rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-[#1E5631]/20 active:scale-95 transition-all duration-300 disabled:opacity-60 flex items-center gap-2.5"
-            >
-              {profileSaving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-              {profileSaving ? 'Saving...' : 'Save Profile'}
-            </button>
-          </div>
-        </SettingsSection>
-
         {/* ── DOCUMENT BRANDING ────────────────────────────────────────────── */}
         <SettingsSection icon={ImageIcon} title="Document Branding" description="Customize printed document headers and footers">
           <SettingsField label="Custom Header">
