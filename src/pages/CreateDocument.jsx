@@ -472,27 +472,24 @@ const CreateDocument = () => {
         </div>
       )}
 
-      {/* --- PREMIUM TOP NAVBAR --- */}
-      <nav className="bg-[#1E5631] px-8 sm:px-12 py-5 sm:py-6 shadow-xl shadow-[#1E5631]/20 flex justify-between items-center w-full sticky top-0 z-50 border-b-4 border-[#D4AF37] no-print">
-        <div className="flex items-center gap-6">
-          <div className="bg-[#FFFFFF] p-1.5 rounded-full shadow-md transition-transform hover:scale-105 border-2 border-white/80 shrink-0">
-            <img src={daLogo} alt="DA Logo" className="h-10 w-10 sm:h-12 sm:w-12 object-contain" />
+      {/* --- NAVBAR --- */}
+      <nav className="bg-[#1E5631] px-6 sm:px-10 py-3 shadow-lg flex justify-between items-center w-full sticky top-0 z-50 border-b-[3px] border-[#D4AF37] no-print">
+        <div className="flex items-center gap-3">
+          <div className="bg-white p-1 rounded-full shadow border-2 border-white/70 shrink-0">
+            <img src={daLogo} alt="DA Logo" className="h-10 w-10 object-contain" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-black text-2xl sm:text-3xl text-[#FFFFFF] leading-none tracking-tighter">DA-AMAD</span>
-            <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.35em] font-bold text-[#D4AF37] mt-1.5 line-clamp-1">Document System</span>
+          <div className="flex flex-col leading-none">
+            <span className="font-black text-xl text-white tracking-tight">DA-AMAD</span>
+            <span className="text-[9px] uppercase tracking-[0.3em] font-bold text-[#D4AF37] mt-0.5">Document System</span>
           </div>
-          <div className="h-8 w-px bg-white/20 mx-2 sm:mx-4"></div>
+          <div className="h-6 w-px bg-white/20 mx-2" />
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2.5 text-white/80 hover:text-white font-black text-[10px] sm:text-xs uppercase tracking-widest transition-all group px-4 py-3 rounded-2xl border border-transparent hover:bg-white/10"
+            className="flex items-center gap-2 text-white/80 hover:text-white font-black text-xs uppercase tracking-widest transition-all group px-3 py-2 rounded-xl border border-transparent hover:bg-white/10"
           >
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft size={15} className="group-hover:-translate-x-1 transition-transform" />
             <span className="hidden sm:inline">Back to Dashboard</span>
           </button>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* Custom Header Actions if needed */}
         </div>
       </nav>
 
@@ -501,85 +498,73 @@ const CreateDocument = () => {
 
         {/* --- LEFT SIDEBAR: FORM PANELS --- */}
         {!isPreviewMode && (
-          <div className="w-[480px] min-w-[480px] bg-[#FFFFFF] border-r border-[#F8F9FA] flex flex-col z-10 no-print shadow-[10px_0_30px_-15px_rgba(0,0,0,0.05)]">
+          <div className="w-[420px] min-w-[420px] bg-[#FFFFFF] border-r border-slate-100 flex flex-col z-10 no-print shadow-[4px_0_20px_-5px_rgba(0,0,0,0.05)]">
 
-            <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar bg-[#FFFFFF]">
+            <div className="flex-1 overflow-y-auto p-5 space-y-6 custom-scrollbar bg-[#FAFAFA]">
 
               {/* Workflow Settings */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Workflow Settings</h3>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-5 bg-[#1E5631] rounded-full" />
+                  <h3 className="text-xs font-black text-[#2B2B2B] uppercase tracking-widest">Workflow Settings</h3>
                 </div>
 
-                <div className="bg-[#FFFFFF] rounded-3xl sm:rounded-[2.5rem] border border-slate-100 p-8 shadow-[0_15px_40px_rgba(0,0,0,0.04)] space-y-6 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/5 blur-[50px] rounded-full"></div>
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#1E5631] to-[#D4AF37]"></div>
-
-                  <div className="grid grid-cols-2 gap-6 relative z-10">
-                    <div className="col-span-2">
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1 flex items-center gap-2">
-                        <Zap size={12} className="text-[#D4AF37]" /> Document Classification
-                      </label>
-                      <div className="relative group/select">
-                        <select
-                          value={docType}
-                          onChange={(e) => setDocType(e.target.value)}
-                          className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-[#2B2B2B] font-extrabold focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-base"
-                        >
-                          <option value="AO">Administrative Order</option>
-                          <option value="SO">Special Order</option>
-                          <option value="MEMO">Memorandum</option>
-                          <option value="LETTER">Official Letter</option>
-                        </select>
-                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-[#2B2B2B]/60 group-focus-within/select:text-[#1E5631] transition-colors">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-                        </div>
+                <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm space-y-4 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#1E5631] to-[#D4AF37]" />
+                  <div>
+                    <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-2 uppercase tracking-widest flex items-center gap-1.5">
+                      <Zap size={10} className="text-[#D4AF37]" /> Document Classification
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={docType}
+                        onChange={(e) => setDocType(e.target.value)}
+                        className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-[#2B2B2B] font-bold focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none bg-white transition-all appearance-none cursor-pointer"
+                      >
+                        <option value="AO">Administrative Order</option>
+                        <option value="SO">Special Order</option>
+                        <option value="MEMO">Memorandum</option>
+                        <option value="LETTER">Official Letter</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#2B2B2B]/40">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                       </div>
                     </div>
-                    <div className="col-span-2">
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Paper Size</label>
-                      <div className="relative">
-                        <select
-                          value={paperSize}
-                          onChange={(e) => setPaperSize(e.target.value)}
-                          className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-3.5 text-[#2B2B2B] font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#F8F9FA]/50 transition-all appearance-none cursor-pointer text-sm"
-                        >
-                          <option value="A4">A4 (Standard)</option>
-                          <option value="Folio">Folio (Long 8.5"x13")</option>
-                        </select>
-                      </div>
-                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-2 uppercase tracking-widest">Paper Size</label>
+                    <select
+                      value={paperSize}
+                      onChange={(e) => setPaperSize(e.target.value)}
+                      className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-[#2B2B2B] font-bold focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none bg-white transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="A4">A4 (Standard)</option>
+                      <option value="Folio">Folio (Long 8.5"x13")</option>
+                    </select>
                   </div>
                 </div>
               </div>
 
-              <div className="h-px bg-slate-100 mx-4"></div>
+              <div className="h-px bg-slate-100" />
 
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-6 bg-[#D4AF37] rounded-full"></div>
-                    <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Issuance Metadata</h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#1E5631]"></span>
-                    <span className="text-[10px] text-[#2B2B2B]/60 font-bold tracking-widest uppercase italic">Header Records</span>
-                  </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-5 bg-[#D4AF37] rounded-full" />
+                  <h3 className="text-xs font-black text-[#2B2B2B] uppercase tracking-widest">Issuance Metadata</h3>
                 </div>
 
                 {(docType !== 'LETTER') && (
-                  <div className="grid grid-cols-2 gap-5 bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] transition-all overflow-hidden relative">
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
+                  <div className="grid grid-cols-2 gap-3 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]" />
                     <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">
+                      <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">
                         {docType === 'AO' ? 'AO Number' : docType === 'SO' ? 'SO Number' : 'Memo Number'}
                       </label>
-                      <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all placeholder:text-[#2B2B2B]/40" placeholder="00-00-00" />
+                      <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none uppercase bg-white transition-all placeholder:text-[#2B2B2B]/30" placeholder="00-00-00" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Series</label>
-                      <input type="number" name="seriesYear" value={formData.seriesYear} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none bg-[#FFFFFF] transition-all shadow-sm" />
+                      <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">Series</label>
+                      <input type="number" name="seriesYear" value={formData.seriesYear} onChange={handleChange} className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none bg-white transition-all" />
                     </div>
                   </div>
                 )}
@@ -614,10 +599,10 @@ const CreateDocument = () => {
                 )}
 
                 {(docType === 'AO' || docType === 'SO' || docType === 'MEMO') && (
-                  <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-slate-100 shadow-[0_15px_40px_rgba(0,0,0,0.04)] relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]"></div>
-                    <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Subject Line</label>
-                    <textarea name="subject" value={formData.subject} onChange={handleChange} className="w-full border-2 border-[#F8F9FA] rounded-2xl px-6 py-5 text-base font-black focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase bg-[#FFFFFF] transition-all min-h-[140px] resize-none leading-relaxed" placeholder="ENTER SUBJECT MATTER IN DETAIL..." rows="4" />
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D4AF37] to-[#1E5631]" />
+                    <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">Official Subject Line</label>
+                    <textarea name="subject" value={formData.subject} onChange={handleChange} className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none uppercase bg-white transition-all min-h-[90px] resize-none leading-relaxed" placeholder="ENTER SUBJECT MATTER IN DETAIL..." rows="3" />
                   </div>
                 )}
 
@@ -679,34 +664,34 @@ const CreateDocument = () => {
                 )}
               </div>
 
-              <hr className="border-gray-200" />
+              <div className="h-px bg-slate-100" />
 
               {/* Editor Workspace Panel */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                    <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Editor Workspace</h3>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-5 bg-[#1E5631] rounded-full" />
+                    <h3 className="text-xs font-black text-[#2B2B2B] uppercase tracking-widest">Editor Workspace</h3>
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     <input type="file" accept=".docx" ref={fileInputRef} className="hidden" onChange={handleWordUpload} />
                     <button
                       type="button"
                       onClick={() => fileInputRef.current.click()}
                       disabled={isImportingWord}
-                      className="flex items-center gap-2.5 bg-[#FFFFFF] border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:text-[#b49020] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest transition-all disabled:opacity-50 active:scale-95 group/word"
+                      className="flex items-center gap-1.5 bg-white border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all disabled:opacity-50 active:scale-95"
                     >
-                      {isImportingWord ? <Loader2 size={14} className="animate-spin" /> : <UploadCloud size={14} className="group-hover/word:-translate-y-0.5 transition-transform" />}
-                      {isImportingWord ? 'IMPORTING...' : 'IMPORT WORD'}
+                      {isImportingWord ? <Loader2 size={12} className="animate-spin" /> : <UploadCloud size={12} />}
+                      {isImportingWord ? 'Importing...' : 'Import Word'}
                     </button>
                     <button
                       type="button"
                       onClick={handleAIGrammarCheck}
                       disabled={isCheckingGrammar}
-                      className="flex items-center gap-2.5 bg-[#1E5631] border border-[#1E5631] text-[#FFFFFF] hover:bg-[#153a21] px-5 py-2.5 rounded-xl text-[10px] font-black tracking-widest shadow-lg shadow-[#1E5631]/20 transition-all disabled:opacity-50 active:scale-95 group/ai"
+                      className="flex items-center gap-1.5 bg-[#1E5631] text-white hover:bg-[#153a21] px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest shadow-md shadow-[#1E5631]/20 transition-all disabled:opacity-50 active:scale-95"
                     >
-                      {isCheckingGrammar ? <Loader2 size={14} className="animate-spin" /> : <Wand2 size={14} className="group-hover/ai:rotate-12 transition-transform shadow-sm" />}
-                      {isCheckingGrammar ? 'OPTIMIZING...' : 'AI GRAMMAR'}
+                      {isCheckingGrammar ? <Loader2 size={12} className="animate-spin" /> : <Wand2 size={12} />}
+                      {isCheckingGrammar ? 'Optimizing...' : 'AI Grammar'}
                     </button>
                   </div>
                 </div>
@@ -777,39 +762,35 @@ const CreateDocument = () => {
                 </div>
               </div>
 
-              <div className="bg-[#FFFFFF] p-8 rounded-[2.5rem] border border-[#F8F9FA] shadow-[0_8px_30px_rgb(0,0,0,0.03)] relative overflow-hidden group/sig">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#1E5631]/10 blur-[60px] rounded-full group-hover/sig:bg-[#1E5631]/10 transition-all"></div>
-
-                <div className="flex items-center gap-3 mb-8 relative z-10">
-                  <div className="w-1.5 h-6 bg-[#1E5631] rounded-full"></div>
-                  <h3 className="text-sm font-black text-[#2B2B2B] uppercase tracking-[0.25em]">Authorization & Review</h3>
+              <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#1E5631] to-[#D4AF37]" />
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-1 h-5 bg-[#1E5631] rounded-full" />
+                  <h3 className="text-xs font-black text-[#2B2B2B] uppercase tracking-widest">Authorization & Review</h3>
                 </div>
-
-                <div className="space-y-6 relative z-10">
-                  <div className="grid grid-cols-1 gap-6">
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Official Signatory</label>
-                      <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none uppercase transition-all" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Signatory Designation</label>
-                      <input type="text" name="signatoryTitle" value={formData.signatoryTitle} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-6 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
-                    </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">Official Signatory</label>
+                    <input type="text" name="signatoryName" value={formData.signatoryName} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-[#2B2B2B] focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none uppercase transition-all" />
                   </div>
-                  <div className="grid grid-cols-2 gap-5 pt-4 border-t border-[#F8F9FA]">
+                  <div>
+                    <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">Signatory Designation</label>
+                    <input type="text" name="signatoryTitle" value={formData.signatoryTitle} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-[#2B2B2B] focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none transition-all" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
                     <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Evaluated By (Initials)</label>
-                      <input type="text" name="reviewerInitials" value={formData.reviewerInitials} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-black text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
+                      <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">Evaluated By</label>
+                      <input type="text" name="reviewerInitials" value={formData.reviewerInitials} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-[#2B2B2B] focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none transition-all" />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-[#2B2B2B]/60 mb-3 uppercase tracking-widest ml-1">Reviewer Role</label>
-                      <input type="text" name="reviewerDesignation" value={formData.reviewerDesignation} onChange={handleChange} className="w-full bg-[#FFFFFF] border-2 border-[#F8F9FA] rounded-2xl px-5 py-4 text-base font-bold text-[#2B2B2B] focus:ring-4 focus:ring-[#1E5631]/10 focus:border-[#1E5631] outline-none transition-all" />
+                      <label className="block text-[10px] font-bold text-[#2B2B2B]/50 mb-1.5 uppercase tracking-widest">Reviewer Role</label>
+                      <input type="text" name="reviewerDesignation" value={formData.reviewerDesignation} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-[#2B2B2B] focus:ring-2 focus:ring-[#1E5631]/20 focus:border-[#1E5631] outline-none transition-all" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="pb-10"></div> {/* Spacer for scrolling */}
+              <div className="pb-6" />
             </div>
           </div>
         )}
@@ -869,43 +850,36 @@ const CreateDocument = () => {
             </div>
           </div>
           {/* --- FIXED BOTTOM ACTION BAR --- */}
-          <div className="bg-[#FFFFFF]/90 backdrop-blur-xl p-8 border-t border-[#F8F9FA] flex gap-5 z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.04)]">
+          <div className="bg-white/95 backdrop-blur-xl px-5 py-3 border-t border-slate-100 flex gap-3 z-20 shadow-[0_-8px_20px_rgba(0,0,0,0.04)]">
             <button
               onClick={handleSaveToDatabase}
               disabled={isSaving}
               type="button"
-              className="group flex-1 bg-[#FFFFFF] border-2 border-[#F8F9FA] hover:border-[#1E5631] hover:text-[#1E5631] text-[#2B2B2B]/60 font-black py-4.5 rounded-[1.5rem] shadow-sm flex justify-center items-center gap-3 text-[11px] tracking-[0.2em] uppercase transition-all active:scale-95 disabled:opacity-70"
+              className="group flex-1 bg-white border border-slate-200 hover:border-[#1E5631] hover:text-[#1E5631] text-[#2B2B2B]/60 font-black py-2.5 rounded-xl shadow-sm flex justify-center items-center gap-2 text-xs tracking-widest uppercase transition-all active:scale-95 disabled:opacity-70"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#F8F9FA] flex items-center justify-center group-hover:bg-[#1E5631]/10 transition-colors">
-                {isSaving ? <Loader2 className="animate-spin text-[#1E5631]" size={16} /> : <Save size={16} className="group-hover:scale-110 transition-transform" />}
-              </div>
-              {isSaving ? "Synchronizing Cloud..." : "Save"}
+              {isSaving ? <Loader2 className="animate-spin text-[#1E5631]" size={15} /> : <Save size={15} />}
+              {isSaving ? 'Saving...' : 'Save'}
             </button>
 
             <button
-              onClick={() => {
-                setIsPreviewMode(!isPreviewMode);
-                if (!isPreviewMode) resetZoom(); // Reset zoom to match new space nicely
-              }}
+              onClick={() => { setIsPreviewMode(!isPreviewMode); if (!isPreviewMode) resetZoom(); }}
               type="button"
-              className={`group flex-1 border-2 font-black py-4.5 rounded-[1.5rem] shadow-sm flex justify-center items-center gap-3 text-[11px] tracking-[0.2em] uppercase transition-all active:scale-95 ${isPreviewMode
-                ? 'bg-[#1E5631]/10 border-[#1E5631]/20 text-[#1E5631]'
-                : 'bg-[#FFFFFF] border-[#F8F9FA] hover:border-[#D4AF37] hover:text-[#D4AF37] text-[#2B2B2B]/60'}`}
+              className={`group flex-1 border font-black py-2.5 rounded-xl shadow-sm flex justify-center items-center gap-2 text-xs tracking-widest uppercase transition-all active:scale-95 ${
+                isPreviewMode
+                  ? 'bg-[#1E5631]/10 border-[#1E5631]/20 text-[#1E5631]'
+                  : 'bg-white border-slate-200 hover:border-[#D4AF37] hover:text-[#D4AF37] text-[#2B2B2B]/60'
+              }`}
             >
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isPreviewMode ? 'bg-[#1E5631]/20' : 'bg-[#F8F9FA] group-hover:bg-[#D4AF37]/10'}`}>
-                {isPreviewMode ? <Edit size={16} className="group-hover:scale-110 transition-transform" /> : <Eye size={16} className="group-hover:scale-110 transition-transform" />}
-              </div>
-              {isPreviewMode ? "Exit Preview" : "Preview"}
+              {isPreviewMode ? <Edit size={15} /> : <Eye size={15} />}
+              {isPreviewMode ? 'Edit' : 'Preview'}
             </button>
 
             <button
               onClick={handlePrint}
               type="button"
-              className="group flex-[1.5] bg-[#1E5631] text-[#FFFFFF] hover:brightness-110 font-black py-4.5 rounded-[1.5rem] shadow-2xl shadow-[#1E5631]/20 flex justify-center items-center gap-4 text-[11px] tracking-[0.2em] uppercase transition-all hover:-translate-y-1 active:scale-95"
+              className="group flex-[1.5] bg-[#1E5631] text-white hover:bg-[#153a21] font-black py-2.5 rounded-xl shadow-lg shadow-[#1E5631]/20 flex justify-center items-center gap-2 text-xs tracking-widest uppercase transition-all hover:-translate-y-0.5 active:scale-95"
             >
-              <div className="w-8 h-8 rounded-xl bg-[#FFFFFF]/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Printer size={20} />
-              </div>
+              <Printer size={15} />
               Print Document
             </button>
           </div>
