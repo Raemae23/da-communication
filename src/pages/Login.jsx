@@ -200,7 +200,7 @@ const Login = () => {
                 isRegistering ? <UserPlus size={18} /> : <LogIn size={18} />
               )}
               <span className="tracking-[0.2em] uppercase">
-                {loading ? (isRegistering ? 'Creating...' : 'Verifying...') : (isRegistering ? 'Create Account' : 'Secure Login')}
+                {loading ? (isRegistering ? 'Creating...' : 'Verifying...') : (isRegistering ? 'Create Account' : 'Sign In')}
               </span>
             </button>
 
