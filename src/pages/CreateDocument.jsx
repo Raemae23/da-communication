@@ -474,6 +474,7 @@ const CreateDocument = () => {
 
       {/* --- NAVBAR --- */}
       <nav className="bg-[#1E5631] px-6 sm:px-10 py-3 shadow-lg flex justify-between items-center w-full sticky top-0 z-50 border-b-[3px] border-[#D4AF37] no-print">
+        {/* Left: Brand + Back */}
         <div className="flex items-center gap-3">
           <div className="bg-white p-1 rounded-full shadow border-2 border-white/70 shrink-0">
             <img src={daLogo} alt="DA Logo" className="h-10 w-10 object-contain" />
@@ -489,6 +490,27 @@ const CreateDocument = () => {
           >
             <ArrowLeft size={15} className="group-hover:-translate-x-1 transition-transform" />
             <span className="hidden sm:inline">Back to Dashboard</span>
+          </button>
+        </div>
+
+        {/* Right: Save + Print */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSaveToDatabase}
+            disabled={isSaving}
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all active:scale-95 disabled:opacity-60"
+          >
+            {isSaving ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+          <button
+            onClick={handlePrint}
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] hover:bg-[#f0c53e] text-[#1a4a2a] font-black text-xs uppercase tracking-widest rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95"
+          >
+            <Printer size={14} />
+            Print
           </button>
         </div>
       </nav>
@@ -697,45 +719,45 @@ const CreateDocument = () => {
                 </div>
 
                 {/* --- SMART SNIPPET BAR --- */}
-                <div className="bg-slate-900/5 p-4 rounded-2xl border border-[#F8F9FA]/60 flex flex-wrap gap-2">
-                  <div className="w-full mb-1 flex items-center gap-2 px-1">
-                    <Zap size={10} className="text-[#D4AF37] fill-[#D4AF37]" />
-                    <span className="text-[9px] font-black text-[#2B2B2B]/60 uppercase tracking-widest">Rapid Insertion Snippets</span>
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-wrap gap-1.5">
+                  <div className="w-full mb-1 flex items-center gap-1.5 px-0.5">
+                    <Zap size={9} className="text-[#D4AF37] fill-[#D4AF37]" />
+                    <span className="text-[9px] font-black text-[#2B2B2B]/50 uppercase tracking-widest">Quick Snippets</span>
                   </div>
                   {SNIPPETS[docType]?.map((snip, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => insertSnippet(snip)}
-                      className="bg-[#FFFFFF] border border-[#F8F9FA] hover:border-[#1E5631] hover:text-[#1E5631] px-3 py-1.5 rounded-lg text-[10px] font-bold text-[#2B2B2B]/60 transition-all active:scale-95 shadow-sm"
+                      className="bg-white border border-slate-200 hover:border-[#1E5631] hover:text-[#1E5631] px-2.5 py-1 rounded-lg text-[9px] font-bold text-[#2B2B2B]/50 transition-all active:scale-95 shadow-sm"
                     >
-                      {snip.length > 25 ? snip.substring(0, 25) + "..." : snip}
+                      {snip.length > 28 ? snip.substring(0, 28) + "..." : snip}
                     </button>
                   ))}
                 </div>
 
                 {/* PAGE EDITORS */}
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {formData.contentSections.map((content, index) => (
-                    <div key={index} className="bg-[#FFFFFF] rounded-[2.5rem] border border-[#F8F9FA] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.04)] focus-within:ring-8 focus-within:ring-[#1E5631]/10 focus-within:border-[#1E5631] transition-all">
-                      <div className="bg-[#F8F9FA]/80 px-8 py-4 border-b border-[#F8F9FA] flex justify-between items-center">
-                        <div className="flex items-center gap-3">
-                          <span className="w-8 h-8 rounded-lg bg-[#1E5631] text-[#FFFFFF] flex items-center justify-center text-xs font-black shadow-lg shadow-[#1E5631]/20">{index + 1}</span>
-                          <span className="text-[10px] font-black text-[#2B2B2B]/60 uppercase tracking-[0.2em]">Document Page {index + 1}</span>
+                    <div key={index} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#1E5631]/20 focus-within:border-[#1E5631] transition-all">
+                      {/* Page header bar */}
+                      <div className="bg-[#F8F9FA] px-4 py-2.5 border-b border-slate-100 flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-md bg-[#1E5631] text-white flex items-center justify-center text-[10px] font-black shadow">{index + 1}</span>
+                          <span className="text-[10px] font-black text-[#2B2B2B]/50 uppercase tracking-widest">Page {index + 1}</span>
                         </div>
                         {formData.contentSections.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removePage(index)}
-                            className="flex items-center gap-2 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-widest transition-all"
+                            className="flex items-center gap-1.5 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg text-[9px] uppercase font-bold tracking-widest transition-all"
                           >
-                            <Trash2 size={12} /> Remove
+                            <Trash2 size={10} /> Remove
                           </button>
                         )}
                       </div>
-                      {/* Apply WYSIWYG Editor Styles matching the formatting rules natively inside TinyMCE */}
                       {/* ReactQuill Editor */}
-                      <div className="da-quill-editor shadow-inner rounded-2xl overflow-hidden border border-[#F8F9FA] focus-within:ring-4 focus-within:ring-[#1E5631]/10 transition-all bg-white">
+                      <div className="da-quill-editor">
                         <ReactQuill
                           theme="snow"
                           value={content || ''}
@@ -743,13 +765,9 @@ const CreateDocument = () => {
                           placeholder={`Start typing page ${index + 1} content here...`}
                           modules={{
                             toolbar: [
-                              [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }, { 'header': [1, 2, 3, 4, 5, 6, false] }],
-                              ['bold', 'italic', 'underline', 'strike'],
-                              [{ 'color': [] }, { 'background': [] }],
-                              [{ 'script': 'sub' }, { 'script': 'super' }],
+                              ['bold', 'italic', 'underline'],
                               [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                              [{ 'direction': 'rtl' }, { 'align': [] }],
-                              ['link', 'blockquote', 'code-block'],
+                              [{ 'align': [] }],
                               ['clean']
                             ],
                           }}
@@ -757,8 +775,6 @@ const CreateDocument = () => {
                       </div>
                     </div>
                   ))}
-
-
                 </div>
               </div>
 
@@ -800,39 +816,52 @@ const CreateDocument = () => {
           {/* Preview Background Pattern */}
           <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `radial-gradient(#1E5631 0.5px, transparent 0.5px)`, backgroundSize: '24px 24px' }}></div>
 
-          {/* --- ZOOM CONTROLS --- */}
-          <div className="flex items-center justify-center gap-3 px-6 py-3 bg-[#FFFFFF] border-b border-[#F8F9FA] z-10">
-            <button
-              onClick={zoomOut}
-              className="p-2 rounded-xl bg-[#F8F9FA] hover:bg-slate-100 text-[#2B2B2B]/60 border border-[#F8F9FA] transition-all"
-              title="Zoom Out"
-            >
-              <ZoomOut size={16} />
-            </button>
-            <span className="text-[11px] font-black text-[#2B2B2B]/60 uppercase tracking-widest min-w-[52px] text-center">
-              {Math.round(activeScale * 100)}%
-            </span>
-            <button
-              onClick={zoomIn}
-              className="p-2 rounded-xl bg-[#F8F9FA] hover:bg-slate-100 text-[#2B2B2B]/60 border border-[#F8F9FA] transition-all"
-              title="Zoom In"
-            >
-              <ZoomIn size={16} />
-            </button>
-            <div className="w-px h-5 bg-slate-200 mx-1"></div>
-            <button
-              onClick={resetZoom}
-              className={`p-2 rounded-xl border transition-all text-xs font-black uppercase tracking-wider ${manualScale === null
-                ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
-                : 'bg-[#F8F9FA] border-[#F8F9FA] text-[#2B2B2B]/60 hover:bg-slate-100'
+          {/* --- ZOOM CONTROLS + LIVE LABEL --- */}
+          <div className="flex items-center justify-between gap-3 px-5 py-2.5 bg-white border-b border-slate-100 z-10">
+            {/* Live indicator */}
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-[10px] font-black text-[#1E5631] uppercase tracking-widest">Live Preview</span>
+            </div>
+
+            {/* Zoom controls */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={zoomOut}
+                className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-[#2B2B2B]/50 border border-slate-200 transition-all"
+                title="Zoom Out"
+              >
+                <ZoomOut size={14} />
+              </button>
+              <span className="text-[11px] font-black text-[#2B2B2B]/50 uppercase tracking-widest min-w-[44px] text-center">
+                {Math.round(activeScale * 100)}%
+              </span>
+              <button
+                onClick={zoomIn}
+                className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-[#2B2B2B]/50 border border-slate-200 transition-all"
+                title="Zoom In"
+              >
+                <ZoomIn size={14} />
+              </button>
+              <div className="w-px h-4 bg-slate-200 mx-0.5" />
+              <button
+                onClick={resetZoom}
+                className={`p-1.5 rounded-lg border transition-all text-xs font-black uppercase tracking-wider ${
+                  manualScale === null
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                    : 'bg-slate-50 border-slate-200 text-[#2B2B2B]/50 hover:bg-slate-100'
                 }`}
-              title="Fit to Screen"
-            >
-              <Maximize2 size={16} />
-            </button>
+                title="Fit to Screen"
+              >
+                <Maximize2 size={14} />
+              </button>
+            </div>
           </div>
 
-          <div className="flex-1 overflow-auto p-12 custom-scrollbar relative z-10" ref={containerRef}>
+          <div className="flex-1 overflow-auto p-6 custom-scrollbar relative z-10" ref={containerRef}>
             <div
               style={{
                 transform: `scale(${activeScale})`,
@@ -848,40 +877,6 @@ const CreateDocument = () => {
                 {docType === 'LETTER' && <OfficialLetter ref={printComponentRef} data={{ ...formData, paperSize }} />}
               </div>
             </div>
-          </div>
-          {/* --- FIXED BOTTOM ACTION BAR --- */}
-          <div className="bg-white/95 backdrop-blur-xl px-5 py-3 border-t border-slate-100 flex gap-3 z-20 shadow-[0_-8px_20px_rgba(0,0,0,0.04)]">
-            <button
-              onClick={handleSaveToDatabase}
-              disabled={isSaving}
-              type="button"
-              className="group flex-1 bg-white border border-slate-200 hover:border-[#1E5631] hover:text-[#1E5631] text-[#2B2B2B]/60 font-black py-2.5 rounded-xl shadow-sm flex justify-center items-center gap-2 text-xs tracking-widest uppercase transition-all active:scale-95 disabled:opacity-70"
-            >
-              {isSaving ? <Loader2 className="animate-spin text-[#1E5631]" size={15} /> : <Save size={15} />}
-              {isSaving ? 'Saving...' : 'Save'}
-            </button>
-
-            <button
-              onClick={() => { setIsPreviewMode(!isPreviewMode); if (!isPreviewMode) resetZoom(); }}
-              type="button"
-              className={`group flex-1 border font-black py-2.5 rounded-xl shadow-sm flex justify-center items-center gap-2 text-xs tracking-widest uppercase transition-all active:scale-95 ${
-                isPreviewMode
-                  ? 'bg-[#1E5631]/10 border-[#1E5631]/20 text-[#1E5631]'
-                  : 'bg-white border-slate-200 hover:border-[#D4AF37] hover:text-[#D4AF37] text-[#2B2B2B]/60'
-              }`}
-            >
-              {isPreviewMode ? <Edit size={15} /> : <Eye size={15} />}
-              {isPreviewMode ? 'Edit' : 'Preview'}
-            </button>
-
-            <button
-              onClick={handlePrint}
-              type="button"
-              className="group flex-[1.5] bg-[#1E5631] text-white hover:bg-[#153a21] font-black py-2.5 rounded-xl shadow-lg shadow-[#1E5631]/20 flex justify-center items-center gap-2 text-xs tracking-widest uppercase transition-all hover:-translate-y-0.5 active:scale-95"
-            >
-              <Printer size={15} />
-              Print Document
-            </button>
           </div>
         </div>
       </div>

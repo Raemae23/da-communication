@@ -233,15 +233,7 @@ textarea {
   color: #1d4ed8;
 }
 
-/* Editor content area */
-.da-quill-editor .ql-toolbar.ql-snow {
-  border: none;
-  border-bottom: 1px solid #F1F5F9;
-  background: rgba(248, 249, 250, 0.8);
-  backdrop-filter: blur(8px);
-  padding: 16px 24px;
-  border-radius: 2rem 2rem 0 0;
-}
+
 
 .da-quill-editor .ql-container.ql-snow {
   border: none;
@@ -251,15 +243,16 @@ textarea {
 }
 
 .da-quill-editor .ql-editor {
-  padding: 50px 60px;
-  min-height: 150px;
-  line-height: 1.6;
+  padding: 24px 28px;
+  min-height: 160px;
+  line-height: 1.7;
   color: #1e293b;
+  font-size: 13px;
 }
 
 .da-quill-editor .ql-editor.ql-blank::before {
-  left: 60px;
-  top: 50px;
+  left: 28px;
+  top: 24px;
   font-style: italic;
   color: #94a3b8;
   opacity: 0.5;

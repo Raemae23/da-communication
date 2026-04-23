@@ -30,7 +30,7 @@ const AdministrativeOrder = forwardRef(({ data }, ref) => {
         return (
           <div
             key={index}
-            className="da-document-wrapper flex flex-col justify-between whitespace-pre-wrap"
+            className="da-document-wrapper flex flex-col justify-between"
             style={paperDimensions}
           >
             {/* --- TOP SECTION --- */}

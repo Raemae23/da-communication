@@ -81,12 +81,11 @@
   orphans: 3;
   widows: 3;
 
-  /* --- FIX: Clear Automatic Text Wrapping --- */
+  /* Natural word wrapping */
   word-wrap: break-word;
   overflow-wrap: break-word;
-  word-break: normal;
-  white-space: pre-wrap;
-  /* Preserve line breaks while still wrapping naturally */
+  word-break: break-word;
+  white-space: normal;
 }
 
 /* Professional Snippet Bar with Glassmorphism */
