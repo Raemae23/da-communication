@@ -27,51 +27,52 @@
   scrollbar-color: #cbd5e1 transparent;
 }
 
-/* Container for multiple physical pages in preview */
-.da-multi-page-container {
+/* ============================================================
+   SINGLE-PAGE PREVIEW with scrollable body
+   ============================================================ */
+
+/* The paper frame — fixed to one page size on screen */
+.da-single-page {
+  width: var(--page-width, 8.27in);
+  height: var(--page-height, 11.69in);
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  /* Space between physical pages */
-  width: 100%;
-  align-items: center;
-}
-
-@media print {
-  .da-multi-page-container {
-    gap: 0 !important;
-    display: block !important;
-  }
-}
-
-/* 1. On-Screen Document Simulation */
-.da-document-wrapper {
   background: white;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;                   /* clips to paper boundary on screen */
+  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15), 0 4px 6px -2px rgba(0,0,0,0.05);
+  margin: 0 auto;
+  position: relative;
+}
 
-  /* --- NEW: DISCRETE PHYSICAL PAGES --- */
-  height: var(--page-height, 11.69in);
-  width: var(--page-width, 8.27in);
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
-  /* Gap between pages in editor */
-  /* No longer using mask-image since we are using discrete wrappers */
+/* Header image — never scrolls away */
+.da-page-header {
+  flex-shrink: 0;
+  width: 100%;
+  line-height: 0;
+}
 
-  /* This shadow handles the visual look of multiple stacked papers */
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-
-  /* Standard Margins for screen simulation */
-  padding-top: 1in;
-  padding-bottom: 1in;
-  padding-left: 1.25in;
-  padding-right: 1in;
-  box-sizing: border-box;
-
-  /* Typography Standards */
+/* Content area — grows to fill space, scrolls vertically */
+.da-page-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5in 1in 0.5in 1.25in;   /* standard DA margins */
   font-family: 'Cambria', serif;
   font-size: 11pt;
   color: black;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.da-page-body::-webkit-scrollbar { width: 5px; }
+.da-page-body::-webkit-scrollbar-track { background: transparent; }
+.da-page-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+/* Footer image — never scrolls away */
+.da-page-footer {
+  flex-shrink: 0;
+  width: 100%;
+  line-height: 0;
 }
 
 .da-document-body {
@@ -237,12 +238,12 @@
   line-height: 1;
 }
 
-/* 2. Print Specific Rules - EXACT 1:1 OVERRIDES */
+/* ============================================================
+   PRINT — header/footer repeat on every physical page
+   ============================================================ */
 @media print {
 
-  html,
-  body {
-    /* Forces the printer to print your background colors/images */
+  html, body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     background: transparent;
@@ -250,31 +251,50 @@
     padding: 0 !important;
   }
 
-  .no-print {
-    display: none !important;
-  }
+  .no-print { display: none !important; }
 
-  .da-document-wrapper {
+  /* Let the single-page wrapper expand freely for print */
+  .da-single-page {
+    width: var(--page-width, 8.27in) !important;
+    height: auto !important;
+    overflow: visible !important;
     box-shadow: none !important;
-    margin: 0 !important;
-    margin-bottom: 0 !important;
-    background-image: none !important;
-    filter: none !important;
-    border: none !important;
+    display: block !important;
   }
 
-  .da-document-wrapper::after {
-    display: none !important;
+  /* Header fixed at top — repeats on every page */
+  .da-page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+  }
+
+  /* Footer fixed at bottom — repeats on every page */
+  .da-page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+  }
+
+  /* Body: add top/bottom margins to avoid overlap with fixed header/footer.
+     Refined to match screen: Header (~1.2in) + padding (0.5in) = 1.7in */
+  .da-page-body {
+    overflow: visible !important;
+    padding-top: 1.7in;
+    padding-bottom: 1.2in;
+    padding-left: 1.25in;
+    padding-right: 1in;
+    margin: 0;
+    display: block !important;
   }
 
   @page {
-    /* We tell the printer to use ZERO margins, because our wrapper padding handles it.
-       The page size (A4/Folio) is injected dynamically from CreateDocument.jsx */
     margin: 0mm !important;
-
-    /* --- NEW: Pagination Logic via CSS Counters --- */
     @bottom-right {
-      /* This pseudo-element grabs the built-in browser page counters */
       content: counter(page) " of " counter(pages);
       font-family: 'Cambria', serif;
       font-size: 10pt;
@@ -283,27 +303,13 @@
     }
   }
 
-  /* Target the first page specifically to hide its pagination */
   @page :first {
-    @bottom-right {
-      content: "";
-      /* No page number on the first page */
-    }
+    @bottom-right { content: ""; }
   }
 
-  /* Utility class to keep blocks together */
-  .page-break-inside-avoid {
-    page-break-inside: avoid !important;
-  }
+  .page-break-inside-avoid { page-break-inside: avoid !important; }
 
-  /* Prevent headings from being left alone at the bottom of a page */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  .review-initials {
+  h1, h2, h3, h4, h5, h6, .review-initials {
     page-break-after: avoid !important;
   }
 }

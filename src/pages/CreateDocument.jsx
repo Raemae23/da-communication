@@ -56,8 +56,8 @@ const SNIPPETS = {
 
 // --- PAPER SIZE CONFIGURATIONS ---
 const PAPER_SIZES = {
-  A4: { name: 'A4 (8.27" x 11.69")', width: '8.27in', height: '11.69in', pageName: 'A4' },
-  Folio: { name: 'Folio / Officio (8.5" x 13")', width: '8.5in', height: '13in', pageName: '216mm 330mm' }
+  A4: { name: 'A4 (Standard)', width: '8.27in', height: '11.69in', pageName: '8.27in 11.69in' },
+  Folio: { name: 'Folio (Long 8.5"x13")', width: '8.5in', height: '13in', pageName: '8.5in 13in' }
 };
 
 // --- AUTO-PAGE: Calculate max usable body height (px) per page ---
@@ -161,8 +161,12 @@ const CreateDocument = () => {
       // Merge old multi-page documents into a single continuous flowing document
       let mergedSections = incomingData.contentSections || [];
       if (mergedSections.length > 1) {
-        mergedSections = [mergedSections.join('<p><br></p>')]; // Join with blank lines
+        // Filter out empty sections and join with line breaks
+        const validSections = mergedSections.filter(s => s && s.trim() !== '' && s !== '<p></p>');
+        mergedSections = [validSections.join('<p><br></p>')];
       }
+      if (mergedSections.length === 0) mergedSections = ['<p></p>'];
+
       setFormData(prev => ({ ...prev, ...incomingData, contentSections: mergedSections }));
       setDocId(incomingData.id);
     }
@@ -322,78 +326,11 @@ const CreateDocument = () => {
     });
   };
 
-  const addPage = () => {
-    setFormData(prev => ({ ...prev, contentSections: [...prev.contentSections, '<p></p>'] }));
-  };
 
-  const removePage = (index) => {
-    if (formData.contentSections.length === 1) return;
-    setFormData(prev => {
-      const updated = [...prev.contentSections];
-      updated.splice(index, 1);
-      return { ...prev, contentSections: updated };
-    });
-  };
 
-  // --- AUTO-PAGE: Called on every Quill content change ---
+  // --- SINGLE CONTINUOUS BODY: No more auto-pagination ---
   const handleEditorChange = (index, newContent) => {
     updateContentSection(index, newContent);
-
-    // Small timeout to let the DOM settle before measuring height
-    setTimeout(() => {
-      try {
-        const editorContainer = document.querySelectorAll('.ql-editor')[index];
-        if (!editorContainer) return;
-
-        const isFirstPage = index === 0;
-        const maxHeight = getMaxBodyHeight(paperSize, docType, isFirstPage);
-
-        if (editorContainer.scrollHeight <= maxHeight) return; // Still fits
-
-        // OVERFLOW DETECTED!
-        // We'll move the last element to the next page
-        const lastChild = editorContainer.lastElementChild;
-        if (!lastChild || editorContainer.children.length <= 1) return;
-
-        const overflowHTML = lastChild.outerHTML;
-        editorContainer.removeChild(lastChild);
-
-        const newCurrentPageHTML = editorContainer.innerHTML;
-
-        setFormData(prev => {
-          const updated = [...prev.contentSections];
-          updated[index] = newCurrentPageHTML;
-
-          if (index === updated.length - 1) {
-            updated.push(overflowHTML);
-          } else {
-            updated[index + 1] = overflowHTML + updated[index + 1];
-          }
-
-          showToast('Text overflowed to the next page!', 'success');
-
-          // Focus shift logic for Quill
-          setTimeout(() => {
-            const allEditors = document.querySelectorAll('.ql-editor');
-            if (allEditors.length > 0 && allEditors[index + 1]) {
-              const nextEditor = allEditors[index + 1];
-              nextEditor.focus();
-              const range = document.createRange();
-              range.selectNodeContents(nextEditor);
-              range.collapse(false);
-              const selection = window.getSelection();
-              selection.removeAllRanges();
-              selection.addRange(range);
-            }
-          }, 200);
-
-          return { ...prev, contentSections: updated };
-        });
-
-      } catch (e) {
-        console.error("Pagination error:", e);
-      }
-    }, 150);
   };
 
 
@@ -736,33 +673,17 @@ const CreateDocument = () => {
                   ))}
                 </div>
 
-                {/* PAGE EDITORS */}
+                {/* CONTINUOUS SINGLE EDITOR */}
                 <div className="space-y-4">
-                  {formData.contentSections.map((content, index) => (
+                  {formData.contentSections.slice(0, 1).map((content, index) => (
                     <div key={index} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#1E5631]/20 focus-within:border-[#1E5631] transition-all">
-                      {/* Page header bar */}
-                      <div className="bg-[#F8F9FA] px-4 py-2.5 border-b border-slate-100 flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-md bg-[#1E5631] text-white flex items-center justify-center text-[10px] font-black shadow">{index + 1}</span>
-                          <span className="text-[10px] font-black text-[#2B2B2B]/50 uppercase tracking-widest">Page {index + 1}</span>
-                        </div>
-                        {formData.contentSections.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removePage(index)}
-                            className="flex items-center gap-1.5 text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg text-[9px] uppercase font-bold tracking-widest transition-all"
-                          >
-                            <Trash2 size={10} /> Remove
-                          </button>
-                        )}
-                      </div>
                       {/* ReactQuill Editor */}
                       <div className="da-quill-editor">
                         <ReactQuill
                           theme="snow"
                           value={content || ''}
                           onChange={(newContent) => handleEditorChange(index, newContent)}
-                          placeholder={`Start typing page ${index + 1} content here...`}
+                          placeholder="Start typing your document content here..."
                           modules={{
                             toolbar: [
                               ['bold', 'italic', 'underline'],
