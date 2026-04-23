@@ -293,10 +293,9 @@ const Dashboard = () => {
         </div>
 
         {/* ── STAT CARDS ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-
+        <div className="flex justify-start">
           {/* Total Issuances */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex items-center gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex items-center gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden w-full sm:w-[320px]">
             <div className="absolute right-0 top-0 w-28 h-28 bg-[#1E5631]/[0.04] rounded-full -mr-8 -mt-8 group-hover:scale-125 transition-transform duration-500" />
             <div className="bg-[#1E5631]/10 p-3.5 rounded-xl text-[#1E5631] shrink-0">
               <FileText size={22} />
@@ -304,30 +303,6 @@ const Dashboard = () => {
             <div>
               <div className="text-4xl font-black text-[#1E5631] tracking-tight leading-none">{documents.length}</div>
               <div className="text-[10px] font-black text-[#2B2B2B]/40 uppercase tracking-widest mt-1.5">Total Issuances</div>
-            </div>
-          </div>
-
-          {/* Approved */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex items-center gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden">
-            <div className="absolute right-0 top-0 w-28 h-28 bg-[#D4AF37]/[0.06] rounded-full -mr-8 -mt-8 group-hover:scale-125 transition-transform duration-500" />
-            <div className="bg-[#D4AF37]/15 p-3.5 rounded-xl text-[#c49b20] shrink-0">
-              <CheckCircle size={22} />
-            </div>
-            <div>
-              <div className="text-4xl font-black text-[#c49b20] tracking-tight leading-none">{documents.filter(d => d.status === 'Approved').length}</div>
-              <div className="text-[10px] font-black text-[#2B2B2B]/40 uppercase tracking-widest mt-1.5">Approved</div>
-            </div>
-          </div>
-
-          {/* Drafts */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex items-center gap-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group relative overflow-hidden">
-            <div className="absolute right-0 top-0 w-28 h-28 bg-slate-400/[0.05] rounded-full -mr-8 -mt-8 group-hover:scale-125 transition-transform duration-500" />
-            <div className="bg-slate-100 p-3.5 rounded-xl text-slate-500 shrink-0">
-              <Archive size={22} />
-            </div>
-            <div>
-              <div className="text-4xl font-black text-slate-500 tracking-tight leading-none">{documents.filter(d => d.status === 'Draft' || !d.status).length}</div>
-              <div className="text-[10px] font-black text-[#2B2B2B]/40 uppercase tracking-widest mt-1.5">Drafts</div>
             </div>
           </div>
         </div>
