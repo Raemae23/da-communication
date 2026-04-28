@@ -680,16 +680,6 @@ const CreateDocument = () => {
                     <h3 className="text-xs font-black text-[#2B2B2B] uppercase tracking-widest">Editor Workspace</h3>
                   </div>
                   <div className="flex gap-2">
-                    <input type="file" accept=".docx" ref={fileInputRef} className="hidden" onChange={handleWordUpload} />
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current.click()}
-                      disabled={isImportingWord}
-                      className="flex items-center gap-1.5 bg-white border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all disabled:opacity-50 active:scale-95"
-                    >
-                      {isImportingWord ? <Loader2 size={12} className="animate-spin" /> : <UploadCloud size={12} />}
-                      {isImportingWord ? 'Importing...' : 'Import Word'}
-                    </button>
                     <button
                       type="button"
                       onClick={handleAIGrammarCheck}
