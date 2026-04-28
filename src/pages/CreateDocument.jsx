@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Printer, FileText, Save, Loader2, Wand2, CheckCircle, Zap, Plus, Trash2, ZoomIn, ZoomOut, Maximize2, AlertTriangle, XCircle, Eye, Edit, UploadCloud, Download, FileDown } from 'lucide-react';
+import { ArrowLeft, Printer, FileText, Save, Loader2, Wand2, CheckCircle, Zap, Plus, Trash2, ZoomIn, ZoomOut, Maximize2, AlertTriangle, XCircle, Eye, Edit, UploadCloud, Download, FileDown, Table } from 'lucide-react';
 // IMPORT FIREBASE FUNCTIONS
 import { saveDocument, updateDocument } from '../services/firebase/firestore';
 
@@ -56,7 +56,7 @@ const joditConfig = {
   readonly: false,
   placeholder: 'Start typing your document content here...',
   toolbarSticky: false,
-  buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent', '|', 'font', 'fontsize', 'paragraph', '|', 'align', 'table', '|', 'undo', 'redo', 'eraser'],
+  buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent', '|', 'font', 'fontsize', 'paragraph', '|', 'align', '|', 'undo', 'redo', 'eraser'],
   removeButtons: ['image', 'video', 'file', 'about', 'print'],
   showCharsCounter: false,
   showWordsCounter: false,
@@ -392,13 +392,13 @@ const CreateDocument = () => {
       const element = printComponentRef.current;
       const filename = `DA_Communication_${docType}_${formData.documentNumber || 'Draft'}.pdf`;
       const opt = {
-        margin:       [0, 0, 0, 0],
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: paperSize === 'Folio' ? [8.5, 13] : 'a4', orientation: 'portrait' }
+        margin: [0, 0, 0, 0],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: paperSize === 'Folio' ? [8.5, 13] : 'a4', orientation: 'portrait' }
       };
-      
+
       html2pdf().set(opt).from(element).save();
       showToast("Downloaded as PDF!", "success");
     } catch (err) {
@@ -680,6 +680,16 @@ const CreateDocument = () => {
                     <h3 className="text-xs font-black text-[#2B2B2B] uppercase tracking-widest">Editor Workspace</h3>
                   </div>
                   <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        insertSnippet('<table style="width:100%; border-collapse:collapse; margin-bottom:15px"><tbody><tr><td style="border:1px solid black; padding:8px"><strong>Header 1</strong></td><td style="border:1px solid black; padding:8px"><strong>Header 2</strong></td><td style="border:1px solid black; padding:8px"><strong>Header 3</strong></td></tr><tr><td style="border:1px solid black; padding:8px"><br></td><td style="border:1px solid black; padding:8px"><br></td><td style="border:1px solid black; padding:8px"><br></td></tr></tbody></table><p><br></p>');
+                      }}
+                      className="flex items-center gap-1.5 bg-white border border-[#2B2B2B]/20 text-[#2B2B2B] hover:bg-[#2B2B2B]/5 px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest transition-all active:scale-95"
+                    >
+                      <Table size={12} />
+                      Insert Table
+                    </button>
                     <button
                       type="button"
                       onClick={handleAIGrammarCheck}
