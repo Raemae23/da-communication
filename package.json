@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@tinymce/tinymce-react": "^6.3.0",
+    "file-saver": "^2.0.5",
     "firebase": "^12.10.0",
+    "html-to-docx": "^1.8.0",
+    "html2pdf.js": "^0.14.0",
     "jodit": "^4.12.2",
     "jodit-react": "^5.3.21",
     "lucide-react": "^0.577.0",

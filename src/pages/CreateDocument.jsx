@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Printer, FileText, Save, Loader2, Wand2, CheckCircle, Zap, Plus, Trash2, ZoomIn, ZoomOut, Maximize2, AlertTriangle, XCircle, Eye, Edit, UploadCloud } from 'lucide-react';
+import { ArrowLeft, Printer, FileText, Save, Loader2, Wand2, CheckCircle, Zap, Plus, Trash2, ZoomIn, ZoomOut, Maximize2, AlertTriangle, XCircle, Eye, Edit, UploadCloud, Download, FileDown } from 'lucide-react';
 // IMPORT FIREBASE FUNCTIONS
 import { saveDocument, updateDocument } from '../services/firebase/firestore';
 
@@ -384,6 +384,29 @@ const CreateDocument = () => {
     }
   }, [location.state?.autoPrint]);
 
+  const handleDownloadPDF = async () => {
+    if (!printComponentRef.current) return;
+    try {
+      const html2pdfModule = await import('html2pdf.js');
+      const html2pdf = html2pdfModule.default ? html2pdfModule.default : html2pdfModule;
+      const element = printComponentRef.current;
+      const filename = `DA_Communication_${docType}_${formData.documentNumber || 'Draft'}.pdf`;
+      const opt = {
+        margin:       [0, 0, 0, 0],
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: paperSize === 'Folio' ? [8.5, 13] : 'a4', orientation: 'portrait' }
+      };
+      
+      html2pdf().set(opt).from(element).save();
+      showToast("Downloaded as PDF!", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to generate PDF.", "error");
+    }
+  };
+
   const insertSnippet = (text) => {
     setFormData(prev => {
       const currentBody = prev.contentSections[0];
@@ -454,8 +477,17 @@ const CreateDocument = () => {
             className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all active:scale-95 disabled:opacity-60"
           >
             {isSaving ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
-            {isSaving ? 'Saving...' : 'Save'}
+            {isSaving ? 'Saving Draft...' : 'Save as Draft'}
           </button>
+          <button
+            onClick={handleDownloadPDF}
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95"
+          >
+            <Download size={14} />
+            .PDF
+          </button>
+          <div className="w-px h-6 bg-white/20 mx-1" />
           <button
             onClick={handlePrint}
             type="button"
