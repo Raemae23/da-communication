@@ -11,9 +11,8 @@ import SpecialOrder from '../templates/SpecialOrder';
 import OfficialLetter from '../templates/OfficialLetter';
 import Memorandum from '../templates/Memorandum';
 
-// --- IMPORT REACT-QUILL FOR RICH TEXT EDITING ---
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+// --- IMPORT JODIT FOR RICH TEXT EDITING ---
+import JoditEditor from 'jodit-react';
 import mammoth from 'mammoth';
 
 import { useAuth } from '../context/AuthContext';
@@ -52,7 +51,23 @@ const SNIPPETS = {
   ]
 };
 
-// --- TINYMCE INITIALIZED IN COMPONENT ---
+// --- JODIT CONFIGURATION ---
+const joditConfig = {
+  readonly: false,
+  placeholder: 'Start typing your document content here...',
+  toolbarSticky: false,
+  buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'outdent', 'indent', '|', 'font', 'fontsize', 'paragraph', '|', 'align', 'table', '|', 'undo', 'redo', 'eraser'],
+  removeButtons: ['image', 'video', 'file', 'about', 'print'],
+  showCharsCounter: false,
+  showWordsCounter: false,
+  showXPathInStatusbar: false,
+  height: 400,
+  style: {
+    fontFamily: '"Times New Roman", Times, serif',
+    fontSize: '13px',
+    color: '#1e293b'
+  }
+};
 
 // --- PAPER SIZE CONFIGURATIONS ---
 const PAPER_SIZES = {
@@ -677,21 +692,13 @@ const CreateDocument = () => {
                 <div className="space-y-4">
                   {formData.contentSections.slice(0, 1).map((content, index) => (
                     <div key={index} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#1E5631]/20 focus-within:border-[#1E5631] transition-all">
-                      {/* ReactQuill Editor */}
-                      <div className="da-quill-editor">
-                        <ReactQuill
-                          theme="snow"
+                      {/* Jodit Editor */}
+                      <div className="da-jodit-editor">
+                        <JoditEditor
                           value={content || ''}
+                          config={joditConfig}
+                          onBlur={(newContent) => handleEditorChange(index, newContent)}
                           onChange={(newContent) => handleEditorChange(index, newContent)}
-                          placeholder="Start typing your document content here..."
-                          modules={{
-                            toolbar: [
-                              ['bold', 'italic', 'underline'],
-                              [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                              [{ 'align': [] }],
-                              ['clean']
-                            ],
-                          }}
                         />
                       </div>
                     </div>
@@ -770,11 +777,10 @@ const CreateDocument = () => {
               <div className="w-px h-4 bg-slate-200 mx-0.5" />
               <button
                 onClick={resetZoom}
-                className={`p-1.5 rounded-lg border transition-all text-xs font-black uppercase tracking-wider ${
-                  manualScale === null
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
-                    : 'bg-slate-50 border-slate-200 text-[#2B2B2B]/50 hover:bg-slate-100'
-                }`}
+                className={`p-1.5 rounded-lg border transition-all text-xs font-black uppercase tracking-wider ${manualScale === null
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                  : 'bg-slate-50 border-slate-200 text-[#2B2B2B]/50 hover:bg-slate-100'
+                  }`}
                 title="Fit to Screen"
               >
                 <Maximize2 size={14} />
